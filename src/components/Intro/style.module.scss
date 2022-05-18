@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  justify-content: center;
+  .textCenter {
+    text-align: center;
+    .introTitle {
+      font-size: 64px;
+      font-weight: bold;
+      width: 800px;
+      line-height: 80px;
+    }
+    .subTitleWrapper {
+      display: flex;
+      justify-content: center;
+      .subTitle {
+        line-height: 30px;
+        font-size: 22px;
+        margin-top: 16px;
+        width: 600px;
+      }
+    }
+  }
+}
