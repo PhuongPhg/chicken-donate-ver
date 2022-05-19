@@ -5,12 +5,12 @@ import eggIcon from "assets/egg-donate.svg";
 import { IOrganisation } from "types/organisation";
 
 function CardItem(props: IOrganisation) {
-  const { description, name, photoUrl } = props;
+  const { description, name, photoUrl, addressId } = props;
 
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate("/profile");
+    navigate("/profile", { state: props });
   };
 
   return (

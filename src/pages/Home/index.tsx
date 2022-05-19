@@ -25,14 +25,8 @@ function Home() {
     <div>
       <Intro />
       <div className={classes.cardListWrapper}>
-        {organisationList.map(ele => (
-          <CardItem
-            addressId={ele.addressId}
-            description={ele.description}
-            name={ele.name}
-            photoUrl={ele.photoUrl}
-            key={ele.addressId}
-          />
+        {organisationList.map(organisation => (
+          <CardItem {...organisation} />
         ))}
       </div>
     </div>

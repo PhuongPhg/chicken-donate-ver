@@ -1,22 +1,20 @@
 import React from "react";
 import classes from "./style.module.scss";
-import avatar from "assets/avatar.webp";
 import heartIcon from "assets/heart.svg";
 import lockIcon from "assets/lock.svg";
 import eggIcon from "assets/egg-donate-box.svg";
 import xIcon from "assets/x.svg";
+import { IOrganisation } from "types/organisation";
 
-function ProfileDetail() {
+function ProfileDetail(props: IOrganisation) {
+  const { description, photoUrl } = props;
   return (
     <div className={classes.container}>
       <div className={classes.content}>
         <div className={classes.donorBox}>
-          <img src={avatar} alt="" className={classes.img}></img>
+          <img src={photoUrl} alt="" className={classes.img}></img>
           <div className={classes.detail}>
-            <p className={classes.text}>
-              Accept donations. Start a membership. Sell anything you like. It’s
-              easier than you think.
-            </p>
+            <p className={classes.text}>{description}</p>
           </div>
         </div>
         <div className={classes.supported}>RECENT DONORS</div>
