@@ -1,22 +1,20 @@
 import React from "react";
 import classes from "./style.module.scss";
 import background from "assets/background.jpg";
-import avatar from "assets/avatar.webp";
+import { IOrganisation } from "types/organisation";
 
-function Header() {
+function Header(props: IOrganisation) {
+  const { description, name, photoUrl } = props;
   return (
     <div className={classes.container}>
       <img src={background} alt="" className={classes.background} />
 
       <div className={classes.profileInfo}>
         <div className={classes.avatar}>
-          <img src={avatar} alt="" className={classes.avatarImg} />
+          <img src={photoUrl} alt="" className={classes.avatarImg} />
         </div>
-        <div className={classes.title}>Chicken donate club</div>
-        <div className={classes.desc}>
-          Accept donations. Start a membership. Sell anything you like. It’s
-          easier than you think.
-        </div>
+        <div className={classes.title}>{name}</div>
+        <div className={classes.desc}>{description}</div>
         <div className={classes.curreny}>99 ETH</div>
       </div>
     </div>
