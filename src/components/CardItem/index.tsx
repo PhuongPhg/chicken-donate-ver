@@ -2,8 +2,11 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import classes from "./style.module.scss";
 import eggIcon from "assets/egg-donate.svg";
+import { IOrganisation } from "types/organisation";
 
-function CardItem() {
+function CardItem(props: IOrganisation) {
+  const { description, name, photoUrl } = props;
+
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -13,15 +16,11 @@ function CardItem() {
   return (
     <div className={classes.cardWrapper} onClick={handleClick}>
       <div className={classes.avatar}>
-        <img
-          className={classes.img}
-          src="https://pbs.twimg.com/media/E9NtT6yVIAcMSFU.jpg"
-          alt=""
-        />
+        <img className={classes.img} src={photoUrl} alt="" />
       </div>
       <div className={classes.info}>
-        <div className={classes.name}>i'm badao</div>
-        <div className={classes.desc}>come here bro</div>
+        <div className={classes.name}>{name}</div>
+        <div className={classes.desc}>{description}</div>
         <div className={classes.egg}>
           <img src={eggIcon} alt="" className={classes.eggIcon} />
           <span>9 ETH</span>
