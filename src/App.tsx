@@ -5,8 +5,7 @@ import { ConnectWallet } from "ethereum";
 
 function App() {
   const fetchData = async () => {
-    const signer = await ConnectWallet();
-    console.log(signer?.provider);
+    await ConnectWallet();
   };
   useEffect(() => {
     fetchData();
