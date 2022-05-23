@@ -2,7 +2,7 @@
   "name": "chicken-donate",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://theanh098.github.io/deploy-github/",
+  "homepage": "https://theanh098.github.io/deploy-chicken-donate/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
