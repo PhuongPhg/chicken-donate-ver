@@ -1,4 +1,5 @@
 import { ethers } from "ethers";
+import donationJSON from "./DonationChain.json";
 
 declare global {
   interface Window {
@@ -6,6 +7,10 @@ declare global {
     ethereum: any;
   }
 }
+
+const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+const provider = new ethers.providers.Web3Provider(window.ethereum);
+const signer = provider.getSigner();
 
 export async function ConnectWallet() {
   const { ethereum } = window;
@@ -16,13 +21,40 @@ export async function ConnectWallet() {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   try {
     await provider.send("eth_requestAccounts", []);
-    const signer = provider.getSigner();
-    return {
-      signer,
-      provider,
-    };
   } catch (error) {
     console.log(error);
     return;
+  }
+}
+
+export async function getBalanceOfOrganisation(address: string) {
+  const contract = new ethers.Contract(
+    contractAddress,
+    donationJSON.abi,
+    signer
+  );
+  try {
+    const balance = await contract.getBalanceOfOrganisation(address);
+    const balanceFormatted = ethers.utils.formatEther(balance);
+    return balanceFormatted;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function donationForOrganization(
+  amount: number,
+  addressTo: string,
+  donorName: string
+) {
+  const Contract = new ethers.Contract(
+    contractAddress,
+    donationJSON.abi,
+    signer
+  );
+  try {
+    await Contract.donationForOrganization(amount, addressTo, donorName);
+  } catch (error) {
+    console.log(error);
   }
 }
