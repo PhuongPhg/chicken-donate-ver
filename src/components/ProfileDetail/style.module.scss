@@ -110,8 +110,14 @@
           border-radius: 25px;
           border: none;
           margin-top: 20px;
+          cursor: pointer;
         }
       }
     }
   }
+}
+
+.acticeBtn {
+  background-color: #717171 !important;
+  color: white !important;
 }
