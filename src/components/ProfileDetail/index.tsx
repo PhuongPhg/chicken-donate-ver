@@ -6,9 +6,10 @@ import eggIcon from "assets/egg-donate-box.svg";
 import xIcon from "assets/x.svg";
 import { IOrganisation } from "types/organisation";
 import { donationForOrganization } from "ethereum";
+import clsx from "clsx";
 
 function ProfileDetail(props: IOrganisation) {
-  const { description, photoUrl, addressId } = props;
+  const { description, photoUrl, addressId, name } = props;
 
   const [donorName, setDonorName] = useState<string>();
   const [eggs, setEggs] = useState<number>(1);
@@ -56,7 +57,7 @@ function ProfileDetail(props: IOrganisation) {
           <div>
             <h2>
               <span>Buy </span>
-              <span style={{ color: "#717171" }}> Creator </span>
+              <span style={{ color: "#717171" }}> {name} </span>
               <span> some lucky eggs</span>
             </h2>
           </div>
@@ -67,14 +68,29 @@ function ProfileDetail(props: IOrganisation) {
           <div className={classes.eggBox}>
             <img src={eggIcon} alt="" />
             <img src={xIcon} alt="" style={{ height: 24, margin: "0 10px" }} />
-            <button onClick={() => handleSelectEggs(1)}>1</button>
-            <button onClick={() => handleSelectEggs(3)}>3</button>
-            <button onClick={() => handleSelectEggs(5)}>5</button>
+            <button
+              onClick={() => handleSelectEggs(1)}
+              className={clsx({ [classes.acticeBtn]: eggs === 1 })}
+            >
+              1
+            </button>
+            <button
+              onClick={() => handleSelectEggs(3)}
+              className={clsx({ [classes.acticeBtn]: eggs === 3 })}
+            >
+              3
+            </button>
+            <button
+              onClick={() => handleSelectEggs(5)}
+              className={clsx({ [classes.acticeBtn]: eggs === 5 })}
+            >
+              5
+            </button>
             <input placeholder="0" onChange={handleChange} />
           </div>
           <div className={classes.eggDetail}>
             <p>(An Egg is equal 0.001 ETH)</p>
-            <p>Your donate is 0.001 ETH</p>
+            <p>Your donate is {eggs * 0.001} ETH</p>
             <button onClick={handleClick}>Support {eggs} eggs</button>
           </div>
         </div>
