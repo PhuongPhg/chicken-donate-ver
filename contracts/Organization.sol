@@ -32,7 +32,6 @@ contract Organization is Ownable {
   event withDrawSuccess (WithdrawHistory _history);
 
   function donate (uint _amount) external payable{
-    // payable(address(this)).transfer(_amount);
     Donation memory donation = Donation(msg.sender, _amount, block.timestamp);
     donations.push(donation);
     totalDonations++;
