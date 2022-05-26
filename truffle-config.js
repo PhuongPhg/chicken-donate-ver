@@ -3,7 +3,7 @@ const HDWalletProvider = require("@truffle/hdwallet-provider");
 const mnemonicKeys = process.env.REACT_APP_SC_MNEMONIC;
 
 module.exports = {
-  contracts_build_directory: "./build/contracts",
+  contracts_build_directory: "./src/ethereum/contracts",
   networks: {
     development: {
       host: "127.0.0.1",

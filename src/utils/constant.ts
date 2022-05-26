@@ -1,0 +1,1 @@
+export const PRICE_OF_EACH_EGG = 0.001;

@@ -1,29 +1,36 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import classes from "./style.module.scss";
 import heartIcon from "assets/heart.svg";
 import lockIcon from "assets/lock.svg";
 import eggIcon from "assets/egg-donate-box.svg";
 import xIcon from "assets/x.svg";
 import { IOrganisation } from "types/organisation";
-import { signer } from "ethereum";
+import { donate, getDonations, signer } from "ethereum";
 import clsx from "clsx";
 import { saveDonor } from "service";
+import { PRICE_OF_EACH_EGG } from "utils/constant";
 
 function ProfileDetail(props: IOrganisation) {
-  const { description, photoUrl, name } = props;
+  const { description, photoUrl, name, addressId } = props;
 
   const [donorName, setDonorName] = useState<string>();
   const [eggs, setEggs] = useState<number>(1);
+  const [donations, setDonations] = useState([]);
 
   const handleSelectEggs = (eggsCount: number) => {
     setEggs(eggsCount);
   };
 
+  const totalPrice = useMemo(() =>  eggs * PRICE_OF_EACH_EGG, [eggs]);
+
   const handleClick = async () => {
-    // if (donorName) await donationForOrganization(eggs, addressId, donorName);
     if (donorName) {
       const addressWallet = await signer.getAddress();
       await saveDonor({ name: donorName, address: addressWallet });
+      const res = await donate(addressId, totalPrice);
+      console.log("res", res); 
+      // TODO: save transaction to firebase 
+      handleGetDonations()
     }
   };
 
@@ -35,6 +42,17 @@ function ProfileDetail(props: IOrganisation) {
     setDonorName(e.target.value);
   };
 
+  const handleGetDonations = useCallback(
+    async () => {
+      const res = await getDonations(addressId)
+    },
+    [addressId],
+  )
+  
+  useEffect(() => {
+    handleGetDonations()
+  }, [handleGetDonations])
+  
   return (
     <div className={classes.container}>
       <div className={classes.content}>
@@ -98,8 +116,8 @@ function ProfileDetail(props: IOrganisation) {
             <input placeholder="0" onChange={handleChange} />
           </div>
           <div className={classes.eggDetail}>
-            <p>(An Egg is equal 0.001 ETH)</p>
-            <p>Your donate is {eggs * 0.001} ETH</p>
+            <p>(An Egg is equal {PRICE_OF_EACH_EGG} ETH)</p>
+            <p>Your donate is {totalPrice} ETH</p>
             <button onClick={handleClick}>Support {eggs} eggs</button>
           </div>
         </div>

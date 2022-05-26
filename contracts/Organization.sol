@@ -39,6 +39,7 @@ contract Organization is Ownable {
   }
 
   function withdraw () public payable onlyOwner {
+    require(address(this) == msg.sender, "Only owner can withdraw");
     WithdrawHistory memory history = WithdrawHistory(address(this).balance, block.timestamp);
     histories.push(history);
     payable(id).transfer(address(this).balance);
@@ -54,5 +55,12 @@ contract Organization is Ownable {
   }
   function getBalance() public view returns (uint){
     return address(this).balance;
+  }
+  
+  function getWithdrawTransaction () public view returns (WithdrawHistory[] memory) {
+    return histories;
+  }
+  function isOwner() public view returns (bool) {
+    return address(this) == msg.sender;
   }
 }
