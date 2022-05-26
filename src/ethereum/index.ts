@@ -10,7 +10,7 @@ declare global {
 
 const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 const provider = new ethers.providers.Web3Provider(window.ethereum);
-const signer = provider.getSigner();
+export const signer = provider.getSigner();
 
 export async function ConnectWallet() {
   const { ethereum } = window;

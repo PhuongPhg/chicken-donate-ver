@@ -5,11 +5,12 @@ import lockIcon from "assets/lock.svg";
 import eggIcon from "assets/egg-donate-box.svg";
 import xIcon from "assets/x.svg";
 import { IOrganisation } from "types/organisation";
-import { donationForOrganization } from "ethereum";
+import { signer } from "ethereum";
 import clsx from "clsx";
+import { saveDonor } from "service";
 
 function ProfileDetail(props: IOrganisation) {
-  const { description, photoUrl, addressId, name } = props;
+  const { description, photoUrl, name } = props;
 
   const [donorName, setDonorName] = useState<string>();
   const [eggs, setEggs] = useState<number>(1);
@@ -19,7 +20,11 @@ function ProfileDetail(props: IOrganisation) {
   };
 
   const handleClick = async () => {
-    if (donorName) await donationForOrganization(eggs, addressId, donorName);
+    // if (donorName) await donationForOrganization(eggs, addressId, donorName);
+    if (donorName) {
+      const addressWallet = await signer.getAddress();
+      await saveDonor({ name: donorName, address: addressWallet });
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,7 +44,11 @@ function ProfileDetail(props: IOrganisation) {
             <p className={classes.text}>{description}</p>
           </div>
         </div>
-        <div className={classes.supported}>RECENT DONORS</div>
+
+        <div style={{ display: "flex" }}>
+          <div className={classes.supported}>RECENT DONORS</div>
+          <div className={classes.supported}>RECENT WITHDRAW</div>
+        </div>
       </div>
       <div className={classes.donate}>
         <div className={classes.header}>
