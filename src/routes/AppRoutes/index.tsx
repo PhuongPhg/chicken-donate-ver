@@ -4,6 +4,7 @@ import { ClientRoutesEnum } from "enums/routes";
 import Layout from "layout/DefaultLayout";
 import Home from "pages/Home";
 import Profile from "pages/Profile";
+import Creation from "pages/Creation";
 
 function AppRoutes() {
   return (
@@ -15,6 +16,14 @@ function AppRoutes() {
       <Route
         path={ClientRoutesEnum.PROFILE}
         element={<Layout RenderComponent={Profile} />}
+      />
+      <Route
+        path={ClientRoutesEnum.PROFILE}
+        element={<Layout RenderComponent={Profile} />}
+      />
+      <Route
+        path={ClientRoutesEnum.CREATE}
+        element={<Layout RenderComponent={Creation} />}
       />
     </Routes>
   );
