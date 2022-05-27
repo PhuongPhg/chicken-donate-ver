@@ -8,6 +8,7 @@ import { saveOrganization } from "service";
 import { IOrganisation } from "types/organisation";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "firestore";
+import { createOrganization } from "ethereum";
 
 function Creation() {
   const navigate = useNavigate();
@@ -51,6 +52,7 @@ function Creation() {
 
   const handleCreate = async () => {
     if (enable) {
+      const res = await createOrganization(name || '')
       const avatarImagesRef = ref(
         storage,
         `images/avatar-organization/${imgUpload.name.replace(/\s+/g, "")}`
@@ -61,14 +63,15 @@ function Creation() {
           storage,
           `images/avatar-organization/${imgUpload.name.replace(/\s+/g, "")}`
         )
-      );
+      )
       await saveOrganization({
-        addressId: "damgiaxi",
+        addressId: res.from,
         name,
         briefDes: shortdes,
         description: des,
         photoUrl: avatarUrl,
         type: type,
+        contractAddress: res.contractAddress
       } as IOrganisation);
       navigate("/");
     }
