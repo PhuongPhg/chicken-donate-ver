@@ -1,22 +1,24 @@
 {
   "files": {
-    "main.css": "/deploy-github/static/css/main.7704eefe.css",
-    "main.js": "/deploy-github/static/js/main.b426a13f.js",
-    "static/js/787.fdd39e32.chunk.js": "/deploy-github/static/js/787.fdd39e32.chunk.js",
-    "static/media/background.jpg": "/deploy-github/static/media/background.bbcfb2adf7eb492b1a51.jpg",
-    "static/media/Logo.svg": "/deploy-github/static/media/Logo.e91d3cfa1851791592c910bbf00d1568.svg",
-    "static/media/egg-donate-box.svg": "/deploy-github/static/media/egg-donate-box.006a5e4d936dfc4dde8249822df6d7dd.svg",
-    "static/media/egg-donate.svg": "/deploy-github/static/media/egg-donate.57d814da060bff812ea39e2695a3cffd.svg",
-    "index.html": "/deploy-github/index.html",
-    "static/media/heart.svg": "/deploy-github/static/media/heart.b65bcc72103bb8c063ec3e8e5b37c5e4.svg",
-    "static/media/lock.svg": "/deploy-github/static/media/lock.7345ed19e4e95866a9f35bbda7935ebc.svg",
-    "static/media/x.svg": "/deploy-github/static/media/x.6c9a4ba71a333be7b021fc6da39d864c.svg",
-    "main.7704eefe.css.map": "/deploy-github/static/css/main.7704eefe.css.map",
-    "main.b426a13f.js.map": "/deploy-github/static/js/main.b426a13f.js.map",
-    "787.fdd39e32.chunk.js.map": "/deploy-github/static/js/787.fdd39e32.chunk.js.map"
+    "main.css": "/chicken-donate/static/css/main.d6368e16.css",
+    "main.js": "/chicken-donate/static/js/main.1244d682.js",
+    "static/js/787.fdd39e32.chunk.js": "/chicken-donate/static/js/787.fdd39e32.chunk.js",
+    "static/media/background.jpg": "/chicken-donate/static/media/background.bbcfb2adf7eb492b1a51.jpg",
+    "static/media/avatar.webp": "/chicken-donate/static/media/avatar.b7e8016770b9caa9c5e6.webp",
+    "static/media/Logo.svg": "/chicken-donate/static/media/Logo.6b1d851ffe2c3e07702b0f931ed9a34a.svg",
+    "static/media/egg-donate-box.svg": "/chicken-donate/static/media/egg-donate-box.8ae23d8cd7339407895591fcc909541a.svg",
+    "static/media/egg-donate.svg": "/chicken-donate/static/media/egg-donate.dd35d68ab453573d45629280ca36a7c8.svg",
+    "index.html": "/chicken-donate/index.html",
+    "static/media/back-icon.svg": "/chicken-donate/static/media/back-icon.e5c5bcc0af55dac6f8acdeaff8ee496a.svg",
+    "static/media/heart.svg": "/chicken-donate/static/media/heart.b65bcc72103bb8c063ec3e8e5b37c5e4.svg",
+    "static/media/lock.svg": "/chicken-donate/static/media/lock.7345ed19e4e95866a9f35bbda7935ebc.svg",
+    "static/media/x.svg": "/chicken-donate/static/media/x.6c9a4ba71a333be7b021fc6da39d864c.svg",
+    "main.d6368e16.css.map": "/chicken-donate/static/css/main.d6368e16.css.map",
+    "main.1244d682.js.map": "/chicken-donate/static/js/main.1244d682.js.map",
+    "787.fdd39e32.chunk.js.map": "/chicken-donate/static/js/787.fdd39e32.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.7704eefe.css",
-    "static/js/main.b426a13f.js"
+    "static/css/main.d6368e16.css",
+    "static/js/main.1244d682.js"
   ]
 }
