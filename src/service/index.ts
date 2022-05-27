@@ -1,8 +1,7 @@
+import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import db from "firestore";
-import { collection, getDocs, doc, setDoc, getDoc } from "firebase/firestore";
-import { IOrganisation } from "types/organisation";
 import { IDonor } from "types/donor";
-import { getAllOrganizations } from "ethereum";
+import { IOrganisation } from "types/organisation";
 
 export async function getOrganisationList() {
   const result: IOrganisation[] = [];

@@ -1,5 +1,6 @@
 {
   "name": "chicken-donate",
+  "homepage": "https://theanh098.github.io/chicken-donate",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
