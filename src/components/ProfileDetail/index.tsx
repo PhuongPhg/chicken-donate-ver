@@ -1,21 +1,21 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import classes from "./style.module.scss";
+import eggIcon from "assets/egg-donate-box.svg";
 import heartIcon from "assets/heart.svg";
 import lockIcon from "assets/lock.svg";
-import eggIcon from "assets/egg-donate-box.svg";
 import xIcon from "assets/x.svg";
-import { IOrganisation } from "types/organisation";
-import { donate, getDonations, signer } from "ethereum";
 import clsx from "clsx";
+import { donate, signer } from "ethereum";
+import React, { useMemo, useState } from "react";
 import { saveDonor } from "service";
+import { IOrganisation } from "types/organisation";
 import { PRICE_OF_EACH_EGG } from "utils/constant";
+import classes from "./style.module.scss";
 
 function ProfileDetail(props: IOrganisation) {
   const { description, photoUrl, name, addressId } = props;
 
   const [donorName, setDonorName] = useState<string>();
   const [eggs, setEggs] = useState<number>(1);
-  const [donations, setDonations] = useState([]);
+  // const [donations, setDonations] = useState([]);
 
   const handleSelectEggs = (eggsCount: number) => {
     setEggs(eggsCount);
@@ -30,7 +30,7 @@ function ProfileDetail(props: IOrganisation) {
       const res = await donate(addressId, totalPrice);
       console.log("res", res); 
       // TODO: save transaction to firebase 
-      handleGetDonations()
+      // handleGetDonations()
     }
   };
 
@@ -42,16 +42,16 @@ function ProfileDetail(props: IOrganisation) {
     setDonorName(e.target.value);
   };
 
-  const handleGetDonations = useCallback(
-    async () => {
-      const res = await getDonations(addressId)
-    },
-    [addressId],
-  )
+  // const handleGetDonations = useCallback(
+  //   async () => {
+  //     const res = await getDonations(addressId)
+  //   },
+  //   [addressId],
+  // )
   
-  useEffect(() => {
-    handleGetDonations()
-  }, [handleGetDonations])
+  // useEffect(() => {
+  //   handleGetDonations()
+  // }, [handleGetDonations])
   
   return (
     <div className={classes.container}>
