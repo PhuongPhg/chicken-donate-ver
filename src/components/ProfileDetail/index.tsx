@@ -9,6 +9,13 @@ import { donate, getDonations, signer } from "ethereum";
 import clsx from "clsx";
 import { saveDonor } from "service";
 import { PRICE_OF_EACH_EGG } from "utils/constant";
+import RecentHistory from "./RecentHistory";
+
+ enum RecentHistoryEnum {
+  DONOR = "DONOR",
+  WITHDRAWS = "WITHDRAWS",
+}
+
 
 function ProfileDetail(props: IOrganisation) {
   const { description, photoUrl, name, addressId } = props;
@@ -16,6 +23,7 @@ function ProfileDetail(props: IOrganisation) {
   const [donorName, setDonorName] = useState<string>();
   const [eggs, setEggs] = useState<number>(1);
   const [donations, setDonations] = useState([]);
+  const [recentHistory, setRecentHistory] = useState<RecentHistoryEnum>(RecentHistoryEnum.DONOR)
 
   const handleSelectEggs = (eggsCount: number) => {
     setEggs(eggsCount);
@@ -48,7 +56,7 @@ function ProfileDetail(props: IOrganisation) {
     },
     [addressId],
   )
-  
+
   useEffect(() => {
     handleGetDonations()
   }, [handleGetDonations])
@@ -64,9 +72,18 @@ function ProfileDetail(props: IOrganisation) {
         </div>
 
         <div style={{ display: "flex" }}>
-          <div className={classes.supported}>RECENT DONORS</div>
-          <div className={classes.supported}>RECENT WITHDRAW</div>
+          <div 
+            className={clsx(classes.supported,{[classes.active]: recentHistory === RecentHistoryEnum.DONOR})} 
+            onClick={() => setRecentHistory(RecentHistoryEnum.DONOR)}>
+            RECENT DONORS
+          </div>
+          <div 
+             className={clsx(classes.supported,{[classes.active]: recentHistory === RecentHistoryEnum.WITHDRAWS})} 
+             onClick={() => setRecentHistory(RecentHistoryEnum.WITHDRAWS)}>
+             RECENT WITHDRAW
+          </div>
         </div>
+        <RecentHistory/>
       </div>
       <div className={classes.donate}>
         <div className={classes.header}>
