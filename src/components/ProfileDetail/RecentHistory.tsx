@@ -1,12 +1,12 @@
 import React from 'react'
 import classes from './style.module.scss'
 
-interface IRecentHistory{
-  name:string;
-  text: string;
-  amount: string;
-  time: string;
-}
+// interface IRecentHistory{
+//   name:string;
+//   text: string;
+//   amount: string;
+//   time: string;
+// }
 
 function RecentHistory() {
   return (

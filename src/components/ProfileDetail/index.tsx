@@ -1,10 +1,10 @@
-import React, { useMemo, useState, useCallback, useEffect } from "react";
 import eggIcon from "assets/egg-donate-box.svg";
 import heartIcon from "assets/heart.svg";
 import lockIcon from "assets/lock.svg";
 import xIcon from "assets/x.svg";
 import clsx from "clsx";
-import { donate, signer, getDonations } from "ethereum";
+import { donate, getDonations, signer } from "ethereum";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { saveDonor } from "service";
 import { IOrganisation } from "types/organisation";
 import { PRICE_OF_EACH_EGG } from "utils/constant";
@@ -21,7 +21,7 @@ function ProfileDetail(props: IOrganisation) {
 
   const [donorName, setDonorName] = useState<string>();
   const [eggs, setEggs] = useState<number>(1);
-  const [donations, setDonations] = useState([]);
+  // const [donations, setDonations] = useState([]);
   const [recentHistory, setRecentHistory] = useState<RecentHistoryEnum>(
     RecentHistoryEnum.DONOR
   );
@@ -53,6 +53,7 @@ function ProfileDetail(props: IOrganisation) {
 
   const handleGetDonations = useCallback(async () => {
     const res = await getDonations(addressId);
+    console.log("res", res);
   }, [addressId]);
 
   useEffect(() => {
