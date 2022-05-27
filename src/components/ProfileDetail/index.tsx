@@ -1,21 +1,20 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import classes from "./style.module.scss";
+import React, { useMemo, useState, useCallback, useEffect } from "react";
+import eggIcon from "assets/egg-donate-box.svg";
 import heartIcon from "assets/heart.svg";
 import lockIcon from "assets/lock.svg";
-import eggIcon from "assets/egg-donate-box.svg";
 import xIcon from "assets/x.svg";
-import { IOrganisation } from "types/organisation";
-import { donate, getDonations, signer } from "ethereum";
 import clsx from "clsx";
+import { donate, signer, getDonations } from "ethereum";
 import { saveDonor } from "service";
+import { IOrganisation } from "types/organisation";
 import { PRICE_OF_EACH_EGG } from "utils/constant";
 import RecentHistory from "./RecentHistory";
+import classes from "./style.module.scss";
 
- enum RecentHistoryEnum {
+enum RecentHistoryEnum {
   DONOR = "DONOR",
   WITHDRAWS = "WITHDRAWS",
 }
-
 
 function ProfileDetail(props: IOrganisation) {
   const { description, photoUrl, name, addressId } = props;
@@ -23,22 +22,24 @@ function ProfileDetail(props: IOrganisation) {
   const [donorName, setDonorName] = useState<string>();
   const [eggs, setEggs] = useState<number>(1);
   const [donations, setDonations] = useState([]);
-  const [recentHistory, setRecentHistory] = useState<RecentHistoryEnum>(RecentHistoryEnum.DONOR)
+  const [recentHistory, setRecentHistory] = useState<RecentHistoryEnum>(
+    RecentHistoryEnum.DONOR
+  );
 
   const handleSelectEggs = (eggsCount: number) => {
     setEggs(eggsCount);
   };
 
-  const totalPrice = useMemo(() =>  eggs * PRICE_OF_EACH_EGG, [eggs]);
+  const totalPrice = useMemo(() => eggs * PRICE_OF_EACH_EGG, [eggs]);
 
   const handleClick = async () => {
     if (donorName) {
       const addressWallet = await signer.getAddress();
       await saveDonor({ name: donorName, address: addressWallet });
       const res = await donate(addressId, totalPrice);
-      console.log("res", res); 
-      // TODO: save transaction to firebase 
-      handleGetDonations()
+      console.log("res", res);
+      // TODO: save transaction to firebase
+      // handleGetDonations()
     }
   };
 
@@ -50,17 +51,14 @@ function ProfileDetail(props: IOrganisation) {
     setDonorName(e.target.value);
   };
 
-  const handleGetDonations = useCallback(
-    async () => {
-      const res = await getDonations(addressId)
-    },
-    [addressId],
-  )
+  const handleGetDonations = useCallback(async () => {
+    const res = await getDonations(addressId);
+  }, [addressId]);
 
   useEffect(() => {
-    handleGetDonations()
-  }, [handleGetDonations])
-  
+    handleGetDonations();
+  }, [handleGetDonations]);
+
   return (
     <div className={classes.container}>
       <div className={classes.content}>
@@ -72,18 +70,24 @@ function ProfileDetail(props: IOrganisation) {
         </div>
 
         <div style={{ display: "flex" }}>
-          <div 
-            className={clsx(classes.supported,{[classes.active]: recentHistory === RecentHistoryEnum.DONOR})} 
-            onClick={() => setRecentHistory(RecentHistoryEnum.DONOR)}>
+          <div
+            className={clsx(classes.supported, {
+              [classes.active]: recentHistory === RecentHistoryEnum.DONOR,
+            })}
+            onClick={() => setRecentHistory(RecentHistoryEnum.DONOR)}
+          >
             RECENT DONORS
           </div>
-          <div 
-             className={clsx(classes.supported,{[classes.active]: recentHistory === RecentHistoryEnum.WITHDRAWS})} 
-             onClick={() => setRecentHistory(RecentHistoryEnum.WITHDRAWS)}>
-             RECENT WITHDRAW
+          <div
+            className={clsx(classes.supported, {
+              [classes.active]: recentHistory === RecentHistoryEnum.WITHDRAWS,
+            })}
+            onClick={() => setRecentHistory(RecentHistoryEnum.WITHDRAWS)}
+          >
+            RECENT WITHDRAW
           </div>
         </div>
-        <RecentHistory/>
+        <RecentHistory />
       </div>
       <div className={classes.donate}>
         <div className={classes.header}>
