@@ -1,6 +1,7 @@
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The contract link: https://kovan.etherscan.io/address/0x094cd8521864e943c61abdbb0b459a7eae7000d0
 
 ## Available Scripts
 
