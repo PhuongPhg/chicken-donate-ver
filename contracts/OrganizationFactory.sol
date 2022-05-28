@@ -7,7 +7,7 @@ import './Organization.sol';
 contract OrganizationFactory {
 
   Organization[] public _organizations;
-  uint totalOrganization;
+  // uint totalOrganization;
 
   struct OrganizationFlag {
     address _address;
@@ -22,14 +22,14 @@ contract OrganizationFactory {
     Organization newOrganization = new Organization(_name, msg.sender);
     newOrganization.transferOwnership(msg.sender);
     _organizations.push(newOrganization);
-    totalOrganization++;
+    // totalOrganization++;
     _organizationContracts[msg.sender] = OrganizationFlag(address(newOrganization), true);
     emit OrganizationCreated(newOrganization);
   }
 
-  function allOrganizations () public view returns (Organization[] memory ){
-    return _organizations;
-  }
+  // function allOrganizations () public view returns (Organization[] memory ){
+  //   return _organizations;
+  // }
   function getContractOfOrganization(address _address) public view returns (address){
     return _organizationContracts[_address]._address;
   }

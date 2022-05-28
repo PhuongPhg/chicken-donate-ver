@@ -1,12 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >0.4.23 <0.9.0;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
+// import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract Organization is Ownable {
+contract Organization {
   string public name;
   address public id;
   uint public totalDonations;
+  address public Owner;
 
   struct Donation {
     address donorId;
@@ -26,7 +27,13 @@ contract Organization is Ownable {
     name = _name;
     id = _id;
     totalDonations = 0;
+    Owner = msg.sender;
   }
+
+  function transferOwnership(address _newOwner) public {
+      require(msg.sender == Owner);
+      Owner = _newOwner;  
+    }
 
   event donationCreated (address _from, uint _amount, uint _time);
   event withDrawSuccess (WithdrawHistory _history);
@@ -38,8 +45,8 @@ contract Organization is Ownable {
     emit donationCreated(msg.sender, _amount, block.timestamp);
   }
 
-  function withdraw () public payable onlyOwner {
-    require(address(this) == msg.sender, "Only owner can withdraw");
+  function withdraw () public payable {
+    require(Owner == msg.sender, "Only owner can withdraw");
     WithdrawHistory memory history = WithdrawHistory(address(this).balance, block.timestamp);
     histories.push(history);
     payable(id).transfer(address(this).balance);
@@ -50,17 +57,17 @@ contract Organization is Ownable {
     return donations;
   }
 
-  function getTotalDonations() public view returns (uint) {
-    return totalDonations;
-  }
+  // function getTotalDonations() public view returns (uint) {
+  //   return totalDonations;
+  // }
   function getBalance() public view returns (uint){
     return address(this).balance;
   }
-  
+
   function getWithdrawTransaction () public view returns (WithdrawHistory[] memory) {
     return histories;
   }
-  function isOwner() public view returns (bool) {
-    return address(this) == msg.sender;
-  }
+  // function isOwner() public view returns (bool) {
+  //   return address(this) == msg.sender;
+  // }
 }

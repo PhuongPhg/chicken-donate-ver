@@ -1,8 +1,8 @@
-import React from "react";
-import logo from "assets/Logo.svg";
-import classes from "./style.module.scss";
-import { Link } from "react-router-dom";
-import clsx from "clsx";
+import React from 'react';
+import logo from 'assets/Logo.svg';
+import classes from './style.module.scss';
+import { Link } from 'react-router-dom';
+import clsx from 'clsx';
 
 interface ITopBar {
   className?: string;

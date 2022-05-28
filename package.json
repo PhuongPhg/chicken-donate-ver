@@ -31,7 +31,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "format": "prettier --ignore-path .gitignore --ignore-path .prettierignore --write \"src/**/*.+(ts|tsx|js|json|css|html|md)\"",
+    "format-sc": "prettier --write 'contracts/**/*.sol'"
   },
   "eslintConfig": {
     "extends": [
@@ -52,6 +54,7 @@
     ]
   },
   "devDependencies": {
-    "prettier": "2.6.2"
+    "prettier": "^2.6.2",
+    "prettier-plugin-solidity": "^1.0.0-beta.19"
   }
 }

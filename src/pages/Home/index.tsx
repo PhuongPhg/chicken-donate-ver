@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import classes from "./style.module.scss";
-import Intro from "components/Intro";
-import CardItem from "components/CardItem";
-import { getOrganisationList } from "service";
-import { IOrganisation } from "types/organisation";
+import React, { useEffect, useState } from 'react';
+import classes from './style.module.scss';
+import Intro from 'components/Intro';
+import CardItem from 'components/CardItem';
+import { getOrganisationList } from 'service';
+import { IOrganisation } from 'types/organisation';
 
 function Home() {
   const [organisationList, setOrganisationList] = useState<IOrganisation[]>([]);

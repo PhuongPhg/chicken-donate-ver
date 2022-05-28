@@ -1,20 +1,17 @@
-import background from "assets/background.jpg";
-import { getOrganizationBalance } from "ethereum";
-import React, { useCallback, useEffect, useState } from "react";
-import { IOrganisation } from "types/organisation";
-import classes from "./style.module.scss";
+import background from 'assets/background.jpg';
+import { getOrganizationBalance } from 'ethereum';
+import React, { useCallback, useEffect, useState } from 'react';
+import { IOrganisation } from 'types/organisation';
+import classes from './style.module.scss';
 
 function Header(props: IOrganisation) {
   const { description, name, photoUrl, addressId } = props;
   const [amount, setAmount] = useState<string>();
 
-  const fetchData = useCallback(
-    async () => {
-      const value = await getOrganizationBalance(addressId);
-      setAmount((value || 0).toString())
-    },
-    [addressId],
-  )
+  const fetchData = useCallback(async () => {
+    const value = await getOrganizationBalance(addressId);
+    setAmount((value || 0).toString());
+  }, [addressId]);
 
   useEffect(() => {
     fetchData();

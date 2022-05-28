@@ -1,14 +1,15 @@
-import React, { useEffect, useMemo, useState } from "react";
-import classes from "./style.module.scss";
-import avatarDefault from "assets/avatar.webp";
-import backIcon from "assets/back-icon.svg";
-import clsx from "clsx";
-import { useNavigate } from "react-router-dom";
-import { saveOrganization } from "service";
-import { IOrganisation } from "types/organisation";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage } from "firestore";
-import { createOrganization } from "ethereum";
+import React, { useEffect, useMemo, useState } from 'react';
+import classes from './style.module.scss';
+import avatarDefault from 'assets/avatar.webp';
+import backIcon from 'assets/back-icon.svg';
+import clsx from 'clsx';
+import { useNavigate } from 'react-router-dom';
+import { saveOrganization } from 'service';
+import { IOrganisation } from 'types/organisation';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage } from 'firestore';
+import { createOrganization } from 'ethereum';
+import { PRICE_FOR_CREATING_ACCOUNT } from 'utils/constant';
 
 function Creation() {
   const navigate = useNavigate();
@@ -52,18 +53,12 @@ function Creation() {
 
   const handleCreate = async () => {
     if (enable) {
-      const res = await createOrganization(name || '')
-      const avatarImagesRef = ref(
-        storage,
-        `images/avatar-organization/${imgUpload.name.replace(/\s+/g, "")}`
-      );
+      const res = await createOrganization(name || '');
+      const avatarImagesRef = ref(storage, `images/avatar-organization/${imgUpload.name.replace(/\s+/g, '')}`);
       await uploadBytes(avatarImagesRef, imgUpload);
       const avatarUrl = await getDownloadURL(
-        ref(
-          storage,
-          `images/avatar-organization/${imgUpload.name.replace(/\s+/g, "")}`
-        )
-      )
+        ref(storage, `images/avatar-organization/${imgUpload.name.replace(/\s+/g, '')}`),
+      );
       await saveOrganization({
         addressId: res.from,
         name,
@@ -71,9 +66,9 @@ function Creation() {
         description: des,
         photoUrl: avatarUrl,
         type: type,
-        contractAddress: res.contractAddress
+        contractAddress: res.contractAddress,
       } as IOrganisation);
-      navigate("/");
+      navigate('/');
     }
   };
 
@@ -110,18 +105,8 @@ function Creation() {
             <label htmlFor="type" className={classes.label}>
               Type
             </label>
-            <input
-              name="type"
-              className={classes.input}
-              placeholder="Youtuber"
-              value={type}
-              onChange={handleChange}
-            />
-            <select
-              id="type"
-              className={clsx(classes.input, classes.select)}
-              onChange={hanldeSelect}
-            >
+            <input name="type" className={classes.input} placeholder="Youtuber" value={type} onChange={handleChange} />
+            <select id="type" className={clsx(classes.input, classes.select)} onChange={hanldeSelect}>
               <option>Youtuber</option>
               <option>Artist</option>
               <option>Charity</option>
@@ -153,23 +138,13 @@ function Creation() {
             />
           </div>
 
-          <button
-            className={classes.createBtn}
-            onClick={handleCreate}
-            disabled={!enable}
-          >
-            Create a organization with only 1 ETH
+          <button className={classes.createBtn} onClick={handleCreate} disabled={!enable}>
+            Create a organization with only {PRICE_FOR_CREATING_ACCOUNT} ETH
           </button>
         </div>
         <div className={classes.upload}>
           <img src={avatarPreveiw || avatarDefault} alt="" />
-          <input
-            type="file"
-            name="file"
-            id="file"
-            style={{ display: "none" }}
-            onChange={handleChangeAvatar}
-          />
+          <input type="file" name="file" id="file" style={{ display: 'none' }} onChange={handleChangeAvatar} />
           <label htmlFor="file" className={classes.uploadLabel}>
             upload your avatar
           </label>

@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import classes from "./style.module.scss";
-import eggIcon from "assets/egg-donate.svg";
-import { IOrganisation } from "types/organisation";
-import { getOrganizationBalance } from "ethereum";
+import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import classes from './style.module.scss';
+import eggIcon from 'assets/egg-donate.svg';
+import { IOrganisation } from 'types/organisation';
+import { getOrganizationBalance } from 'ethereum';
 
 function CardItem(props: IOrganisation) {
   const { description, name, photoUrl, addressId } = props;
@@ -12,16 +12,13 @@ function CardItem(props: IOrganisation) {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate("/profile", { state: props });
+    navigate('/profile', { state: props });
   };
 
-  const fetchData = useCallback(
-    async () => {
-      const value = await getOrganizationBalance(addressId);
-      setAmount((value || 0).toString())
-    },
-    [addressId],
-  )
+  const fetchData = useCallback(async () => {
+    const value = await getOrganizationBalance(addressId);
+    setAmount((value || 0).toString());
+  }, [addressId]);
 
   useEffect(() => {
     fetchData();

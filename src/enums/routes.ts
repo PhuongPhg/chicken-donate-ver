@@ -1,5 +1,5 @@
 export enum ClientRoutesEnum {
-  HOME = "/",
-  PROFILE = "/profile",
-  CREATE = "/create",
+  HOME = '/',
+  PROFILE = '/profile',
+  CREATE = '/create',
 }

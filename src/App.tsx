@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
-import { BrowserRouter } from "react-router-dom";
-import AppRoutes from "routes/AppRoutes";
-import { ConnectWallet } from "ethereum";
+import React, { useEffect } from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import AppRoutes from 'routes/AppRoutes';
+import { ConnectWallet } from 'ethereum';
 
 function App() {
   const fetchData = async () => {
