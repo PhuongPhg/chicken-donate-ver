@@ -55,7 +55,10 @@ function Header(props: IOrganisation) {
           <img src={photoUrl} alt="" className={classes.avatarImg} />
         </div>
         <div className={classes.nameWrapper}>
-          <div className={classes.title}>{name}</div>
+          <div className={classes.title}>
+            {name}
+            {isOwner && <button onClick={onWithdraw}>Withdraw</button>}
+          </div>
           <div className={classes.desc}>{description}</div>
         </div>
         <div className={classes.share}>
@@ -67,10 +70,10 @@ function Header(props: IOrganisation) {
           </button>
           <button style={{ backgroundColor: '#E85280', fontWeight: 600, color: 'white' }}>Follow</button>
         </div>
-        <div>
-          {/* <button>Share</button> */}
+        {/* <div>
+          <button>Share</button>
           {isOwner && <button onClick={onWithdraw}>Withdraw</button>}
-        </div>
+        </div> */}
       </div>
     </div>
   );
