@@ -1,7 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import classes from './style.module.scss';
-import avatarDefault from 'assets/avatar.webp';
-import backIcon from 'assets/back-icon.svg';
 import clsx from 'clsx';
 import { useNavigate } from 'react-router-dom';
 import { saveOrganization } from 'service';
@@ -10,6 +8,8 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from 'firestore';
 import { createOrganization } from 'ethereum';
 import { PRICE_FOR_CREATING_ACCOUNT } from 'utils/constant';
+import background from 'assets/background.jpg';
+import cameraIcon from 'assets/camera.png';
 
 function Creation() {
   const navigate = useNavigate();
@@ -32,16 +32,8 @@ function Creation() {
     return Object.values(organisationInfo).every(ele => ele);
   }, [des, name, type, avatarPreveiw, shortdes]);
 
-  const hanldeSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setType(e.target.value);
-  };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setType(e.target.value);
-  };
-
-  const handleBack = () => {
-    navigate(-1);
   };
 
   const handleChangeAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,54 +72,59 @@ function Creation() {
 
   return (
     <>
-      <div className={classes.main}>
-        <div className={classes.infomation}>
-          <div className={classes.back}>
-            <h1>Create Organization</h1>
-            <div className={classes.backIcon} onClick={handleBack}>
-              <img src={backIcon} alt=""></img>
+      <div className={classes.background}>
+        <img src={background} alt="" />
+      </div>
+      <div style={{ padding: '0 135px' }}>
+        <div className={classes.main}>
+          <div className={classes.upload}>
+            <label htmlFor="filechange">
+              <div className={clsx(classes.camera, { [classes.unsetborder]: avatarPreveiw })}>
+                {!avatarPreveiw ? (
+                  <img src={cameraIcon} alt="" width={24} height={18} />
+                ) : (
+                  <img src={avatarPreveiw} alt="" className={classes.avatar} />
+                )}
+              </div>
+            </label>
+            <input type="file" id="filechange" style={{ display: 'none' }} onChange={handleChangeAvatar} />
+          </div>
+          <div className={classes.infomation}>
+            <h1 className={classes.heading}>Create Organization</h1>
+            <div className={classes.form}>
+              <input
+                id="name"
+                className={classes.input}
+                placeholder="Organization name"
+                onChange={e => {
+                  setName(e.target.value);
+                }}
+              />
+
+              <input
+                name="type"
+                className={classes.input}
+                placeholder="Youtuber"
+                value={type}
+                onChange={handleChange}
+                list="type"
+              />
+              <datalist id="type">
+                <option value="Artist" />
+                <option value="Youtuber" />
+                <option value="Charity" />
+              </datalist>
             </div>
-          </div>
-          <div className={classes.item}>
-            <label htmlFor="name" className={classes.label}>
-              Organization name
-            </label>
-            <input
-              id="name"
-              className={classes.input}
-              placeholder="name"
-              onChange={e => {
-                setName(e.target.value);
-              }}
-            />
-          </div>
-          <div className={classes.item}>
-            <label htmlFor="type" className={classes.label}>
-              Type
-            </label>
-            <input name="type" className={classes.input} placeholder="Youtuber" value={type} onChange={handleChange} />
-            <select id="type" className={clsx(classes.input, classes.select)} onChange={hanldeSelect}>
-              <option>Youtuber</option>
-              <option>Artist</option>
-              <option>Charity</option>
-            </select>
-          </div>
-          <div className={classes.description}>
-            <label htmlFor="des" className={classes.label}>
-              Description
-            </label>
-            <textarea
-              id="des"
-              placeholder="Write about you here"
-              onChange={e => {
-                setDes(e.target.value);
-              }}
-            />
-          </div>
-          <div className={classes.item}>
-            <label htmlFor="shortdes" className={classes.label}>
-              Short description
-            </label>
+            <div className={classes.description}>
+              <textarea
+                id="des"
+                placeholder="description, write about here"
+                onChange={e => {
+                  setDes(e.target.value);
+                }}
+              />
+            </div>
+
             <input
               id="shortdes"
               className={classes.input}
@@ -136,18 +133,14 @@ function Creation() {
                 setShortDes(e.target.value);
               }}
             />
-          </div>
 
-          <button className={classes.createBtn} onClick={handleCreate} disabled={!enable}>
-            Create a organization with only {PRICE_FOR_CREATING_ACCOUNT} ETH
-          </button>
-        </div>
-        <div className={classes.upload}>
-          <img src={avatarPreveiw || avatarDefault} alt="" />
-          <input type="file" name="file" id="file" style={{ display: 'none' }} onChange={handleChangeAvatar} />
-          <label htmlFor="file" className={classes.uploadLabel}>
-            upload your avatar
-          </label>
+            <button
+              className={clsx(classes.createBtn, { [classes.activeCreate]: enable })}
+              onClick={handleCreate}
+              disabled={!enable}>
+              Create a organization with only {PRICE_FOR_CREATING_ACCOUNT} ETH
+            </button>
+          </div>
         </div>
       </div>
       <div className={classes.overlay}></div>
