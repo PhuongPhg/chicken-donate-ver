@@ -49,3 +49,13 @@ export async function getDonor(address: string) {
     console.log('get donor', error);
   }
 }
+export const getOrganization = async (addressId: string) => {
+  try {
+    const docRef = doc(db, 'organisation', addressId);
+    const organization = await getDoc(docRef);
+    if (organization.exists()) return organization.data() as IOrganisation;
+    return undefined;
+  } catch (error) {
+    console.log('getOrganization', error);
+  }
+}

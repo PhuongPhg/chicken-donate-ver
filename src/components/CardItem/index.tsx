@@ -12,7 +12,7 @@ function CardItem(props: IOrganisation) {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate('/profile', { state: props });
+    navigate(`/profile/${addressId}`, { state: props });
   };
 
   const fetchData = useCallback(async () => {
