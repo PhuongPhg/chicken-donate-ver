@@ -8,24 +8,21 @@ import { getOrganization } from 'service';
 function Profile() {
   const location = useLocation();
   const params = useParams();
-  const [organization, setOrganization] = useState<IOrganisation>()
+  const [organization, setOrganization] = useState<IOrganisation>();
 
-  const getOrganizationInfo = useCallback(
-    async () => {
-      const data = await getOrganization(params.addressId || '') as IOrganisation;
-      setOrganization(data)
-    },
-    [params],
-  )
-  
+  const getOrganizationInfo = useCallback(async () => {
+    const data = (await getOrganization(params.addressId || '')) as IOrganisation;
+    setOrganization(data);
+  }, [params]);
+
   useEffect(() => {
-    if(!!(location.state as IOrganisation)?.addressId){
-      setOrganization(location.state as IOrganisation)
+    if (!!(location.state as IOrganisation)?.addressId) {
+      setOrganization(location.state as IOrganisation);
     } else {
-      getOrganizationInfo()
+      getOrganizationInfo();
     }
-  }, [getOrganizationInfo, location.state])
-  
+  }, [getOrganizationInfo, location.state]);
+
   return (
     <div>
       <Header {...(organization as IOrganisation)} />

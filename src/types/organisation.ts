@@ -14,3 +14,8 @@ export interface IDonationsEthers {
   donorId: string;
   time: BigNumber;
 }
+
+export interface IWithdrawTransaction {
+  amount: BigNumber;
+  time: BigNumber;
+}

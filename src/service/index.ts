@@ -2,7 +2,6 @@ import db from 'firestore';
 import { collection, getDocs, doc, setDoc, getDoc } from 'firebase/firestore';
 import { IOrganisation } from 'types/organisation';
 import { IDonor } from 'types/donor';
-import { getAllOrganizations } from 'ethereum';
 
 export async function getOrganisationList() {
   const result: IOrganisation[] = [];
@@ -11,9 +10,6 @@ export async function getOrganisationList() {
     querySnapshot.forEach(doc => {
       result.push(doc.data() as IOrganisation);
     });
-    // TODO: enable when deploy contract
-    // const organizationFromBlockchain = await getAllOrganizations()
-    // return result.filter(o => (organizationFromBlockchain || []).includes(o.contractAddress));
     return result;
   } catch (error) {
     console.log('get list organization', error);
@@ -58,4 +54,4 @@ export const getOrganization = async (addressId: string) => {
   } catch (error) {
     console.log('getOrganization', error);
   }
-}
+};
