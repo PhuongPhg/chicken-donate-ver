@@ -5,11 +5,13 @@ import lockIcon from 'assets/lock.svg';
 import eggIcon from 'assets/egg-donate-box.svg';
 import xIcon from 'assets/x.svg';
 import { IOrganisation } from 'types/organisation';
-import { donate, getDonations, signer } from 'ethereum';
+import { donate, getDonations, getOrganizationContract, getWithdrawTransaction, signer } from 'ethereum';
 import clsx from 'clsx';
 import { saveDonor } from 'service';
 import { PRICE_OF_EACH_EGG } from 'utils/constant';
 import RecentHistory, { IRecentHistory } from './RecentHistory';
+import { EContractEvents } from 'enums/contract';
+import { Contract } from 'ethers';
 
 enum RecentHistoryEnum {
   DONOR = 'DONOR',
@@ -23,6 +25,7 @@ function ProfileDetail(props: IOrganisation) {
   const [eggs, setEggs] = useState<number>(1);
   const [donations, setDonations] = useState<IRecentHistory[]>([]);
   const [recentHistory, setRecentHistory] = useState<RecentHistoryEnum>(RecentHistoryEnum.DONOR);
+  const [withdrawTransactions, setWithdrawTransactions] = useState<Partial<IRecentHistory>[]>([]);
 
   const handleSelectEggs = (eggsCount: number) => {
     setEggs(eggsCount);
@@ -34,10 +37,7 @@ function ProfileDetail(props: IOrganisation) {
     if (donorName) {
       const addressWallet = await signer.getAddress();
       await saveDonor({ name: donorName, address: addressWallet });
-      const res = await donate(addressId, totalPrice);
-      console.log('res', res);
-      // TODO: save transaction to firebase
-      handleGetDonations();
+      await donate(addressId, totalPrice);
     }
   };
 
@@ -54,9 +54,34 @@ function ProfileDetail(props: IOrganisation) {
     setDonations(res);
   }, [addressId]);
 
+  const handleGetHistories = useCallback(
+    async (changeTab = true) => {
+      const res = (await getWithdrawTransaction(addressId)) as Partial<IRecentHistory>[];
+      setWithdrawTransactions(res);
+      if (changeTab) {
+        setRecentHistory(RecentHistoryEnum.WITHDRAWS);
+      }
+    },
+    [addressId],
+  );
+
   useEffect(() => {
     handleGetDonations();
   }, [handleGetDonations]);
+
+  useEffect(() => {
+    let contract: Contract;
+    (async () => {
+      contract = await getOrganizationContract(addressId);
+      contract.on(EContractEvents.DONATION_CREATED, handleGetDonations);
+      contract.on(EContractEvents.WITHDRAW_SUCCESS, () => handleGetHistories(false));
+    })();
+
+    return () => {
+      contract?.off(EContractEvents.DONATION_CREATED, handleGetDonations);
+      contract?.off(EContractEvents.WITHDRAW_SUCCESS, () => handleGetHistories(false));
+    };
+  }, [addressId, handleGetDonations, handleGetHistories]);
 
   return (
     <div className={classes.container}>
@@ -71,17 +96,24 @@ function ProfileDetail(props: IOrganisation) {
         <div style={{ display: 'flex' }}>
           <div
             className={clsx(classes.supported, { [classes.active]: recentHistory === RecentHistoryEnum.DONOR })}
-            onClick={() => setRecentHistory(RecentHistoryEnum.DONOR)}>
+            onClick={() => setRecentHistory(RecentHistoryEnum.DONOR)}
+          >
             RECENT DONORS
           </div>
           <div
             className={clsx(classes.supported, { [classes.active]: recentHistory === RecentHistoryEnum.WITHDRAWS })}
-            onClick={() => setRecentHistory(RecentHistoryEnum.WITHDRAWS)}>
+            onClick={() => handleGetHistories(true)}
+          >
             RECENT WITHDRAW
           </div>
         </div>
-        {donations?.map((donation, i) => (
-          <RecentHistory key={i} {...donation} />
+        {(recentHistory === RecentHistoryEnum.WITHDRAWS ? withdrawTransactions : donations)?.map((donation, i) => (
+          <RecentHistory
+            key={i}
+            {...donation}
+            isWithdrawTransaction={recentHistory === RecentHistoryEnum.WITHDRAWS}
+            organizationName={name}
+          />
         ))}
       </div>
       <div className={classes.donate}>

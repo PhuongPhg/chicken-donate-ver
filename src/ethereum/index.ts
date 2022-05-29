@@ -1,5 +1,5 @@
 import { ethers, utils } from 'ethers';
-import { IDonationsEthers } from 'types/organisation';
+import { IDonationsEthers, IWithdrawTransaction } from 'types/organisation';
 import { PRICE_FOR_CREATING_ACCOUNT } from 'utils/constant';
 import organizationJson from './contracts/Organization.json';
 import factoryJson from './contracts/OrganizationFactory.json';
@@ -114,7 +114,11 @@ export async function getDonations(address: string) {
 export async function getWithdrawTransaction(address: string) {
   try {
     const contract = await getOrganizationContract(address);
-    return await contract.getWithdrawTransaction();
+    const res: IWithdrawTransaction[] = await contract.getWithdrawTransaction();
+    return (res || []).map((o: IWithdrawTransaction) => ({
+      amount: utils.formatEther(o?.amount),
+      time: Number(o.time),
+    }));
   } catch (error) {
     console.log('getWithdrawTransaction err', error);
   }
