@@ -12,6 +12,10 @@ import { PRICE_OF_EACH_EGG } from 'utils/constant';
 import RecentHistory, { IRecentHistory } from './RecentHistory';
 import { EContractEvents } from 'enums/contract';
 import { Contract } from 'ethers';
+import facebookIcon from 'assets/facebook.png';
+import twitterIcon from 'assets/twitter.png';
+import tiktokIcon from 'assets/toptop.png';
+import instaIcon from 'assets/insta.png';
 
 enum RecentHistoryEnum {
   DONOR = 'DONOR',
@@ -91,19 +95,24 @@ function ProfileDetail(props: IOrganisation) {
           <div className={classes.detail}>
             <p className={classes.text}>{description}</p>
           </div>
+          <div className={classes.media}>
+            <p>My social media</p>
+            <img src={twitterIcon} alt="" />
+            <img src={facebookIcon} alt="" />
+            <img src={instaIcon} alt="" />
+            <img src={tiktokIcon} alt="" />
+          </div>
         </div>
 
         <div style={{ display: 'flex' }}>
           <div
             className={clsx(classes.supported, { [classes.active]: recentHistory === RecentHistoryEnum.DONOR })}
-            onClick={() => setRecentHistory(RecentHistoryEnum.DONOR)}
-          >
+            onClick={() => setRecentHistory(RecentHistoryEnum.DONOR)}>
             RECENT DONORS
           </div>
           <div
             className={clsx(classes.supported, { [classes.active]: recentHistory === RecentHistoryEnum.WITHDRAWS })}
-            onClick={() => handleGetHistories(true)}
-          >
+            onClick={() => handleGetHistories(true)}>
             RECENT WITHDRAW
           </div>
         </div>
@@ -122,7 +131,7 @@ function ProfileDetail(props: IOrganisation) {
             <img src={lockIcon} alt="" />
             <label>Membership</label>
           </div>
-          <div className={classes.item}>
+          <div className={classes.item} style={{ backgroundColor: 'rgba(232, 82, 128, 0.2)', color: '#E85280' }}>
             <img src={heartIcon} alt="" />
             <label>Support</label>
           </div>
@@ -136,27 +145,28 @@ function ProfileDetail(props: IOrganisation) {
               <span> some lucky eggs</span>
             </h2>
           </div>
-          <input placeholder="Your Name" onChange={selectDonorNameHandle} />
         </div>
 
         <div className={classes.footer}>
+          <input placeholder="Your Name" onChange={selectDonorNameHandle} className={classes.inputname} />
+          <textarea placeholder="say somthing nice" className={classes.inputmess} />
           <div className={classes.eggBox}>
             <img src={eggIcon} alt="" />
             <img src={xIcon} alt="" style={{ height: 24, margin: '0 10px' }} />
-            <button onClick={() => handleSelectEggs(1)} className={clsx({ [classes.acticeBtn]: eggs === 1 })}>
-              1
-            </button>
-            <button onClick={() => handleSelectEggs(3)} className={clsx({ [classes.acticeBtn]: eggs === 3 })}>
-              3
-            </button>
-            <button onClick={() => handleSelectEggs(5)} className={clsx({ [classes.acticeBtn]: eggs === 5 })}>
-              5
-            </button>
-            <input placeholder="0" onChange={handleChange} />
+            {[1, 2, 3, 4, 5].map(ele => (
+              <button
+                key={ele}
+                onClick={() => handleSelectEggs(ele)}
+                className={clsx({ [classes.acticeBtn]: eggs === ele })}>
+                {ele}
+              </button>
+            ))}
+            <input placeholder="some eggs" onChange={handleChange} className={classes.inputegg} />
           </div>
           <div className={classes.eggDetail}>
-            <p>(An Egg is equal {PRICE_OF_EACH_EGG} ETH)</p>
-            <p>Your donate is {totalPrice} ETH</p>
+            <p>
+              An Egg is equal {PRICE_OF_EACH_EGG} ETH (Your donate is {totalPrice.toFixed(4)} ETH)
+            </p>
             <button onClick={handleClick}>Support {eggs} eggs</button>
           </div>
         </div>

@@ -1,8 +1,10 @@
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import background from 'assets/background.jpg';
 import { getOrganizationBalance, signer, withdraw } from 'ethereum';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { IOrganisation } from 'types/organisation';
 import classes from './style.module.scss';
+import eggIcon from 'assets/egg-donate.svg';
+import shareIcon from 'assets/share.png';
 
 function Header(props: IOrganisation) {
   const { description, name, photoUrl, addressId } = props;
@@ -52,11 +54,21 @@ function Header(props: IOrganisation) {
         <div className={classes.avatar}>
           <img src={photoUrl} alt="" className={classes.avatarImg} />
         </div>
-        <div className={classes.title}>{name}</div>
-        <div className={classes.desc}>{description}</div>
-        <div className={classes.curreny}>{amount} ETH</div>
+        <div className={classes.nameWrapper}>
+          <div className={classes.title}>{name}</div>
+          <div className={classes.desc}>{description}</div>
+        </div>
+        <div className={classes.share}>
+          <img src={eggIcon} alt="" width={24} height={24} />
+          <div className={classes.curreny}>{amount} ETH</div>
+          <button>
+            <img src={shareIcon} alt="" style={{ marginRight: 12 }} />
+            <span>Share</span>
+          </button>
+          <button style={{ backgroundColor: '#E85280', fontWeight: 600, color: 'white' }}>Follow</button>
+        </div>
         <div>
-          <button>Share</button>
+          {/* <button>Share</button> */}
           {isOwner && <button onClick={onWithdraw}>Withdraw</button>}
         </div>
       </div>
