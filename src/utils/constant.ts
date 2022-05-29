@@ -1,2 +1,2 @@
 export const PRICE_OF_EACH_EGG = 0.0001;
-export const PRICE_FOR_CREATING_ACCOUNT = 0.001;
+export const PRICE_FOR_CREATING_ACCOUNT = 0.0;
