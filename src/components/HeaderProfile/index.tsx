@@ -8,13 +8,10 @@ function Header(props: IOrganisation) {
   const { description, name, photoUrl, addressId } = props;
   const [amount, setAmount] = useState<string>();
 
-  const fetchData = useCallback(
-    async () => {
-      const value = await getOrganizationBalance(addressId);
-      setAmount((value || 0).toString())
-    },
-    [addressId],
-  )
+  const fetchData = useCallback(async () => {
+    const value = await getOrganizationBalance(addressId);
+    setAmount((value || 0).toString());
+  }, [addressId]);
 
   useEffect(() => {
     fetchData();

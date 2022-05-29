@@ -15,13 +15,10 @@ function CardItem(props: IOrganisation) {
     navigate("/profile", { state: props });
   };
 
-  const fetchData = useCallback(
-    async () => {
-      const value = await getOrganizationBalance(addressId);
-      setAmount((value || 0).toString())
-    },
-    [addressId],
-  )
+  const fetchData = useCallback(async () => {
+    const value = await getOrganizationBalance(addressId);
+    setAmount((value || 0).toString());
+  }, [addressId]);
 
   useEffect(() => {
     fetchData();
