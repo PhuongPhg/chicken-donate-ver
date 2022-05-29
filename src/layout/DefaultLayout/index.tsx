@@ -16,16 +16,11 @@ function DefaultLayout(props: ILayout) {
 
   return (
     <div>
-      <Topbar
-        className={clsx({
-          [classes.hidden]: location.pathname === ClientRoutesEnum.CREATE,
-        })}
-      />
+      <Topbar />
       <div
         className={clsx({
           [classes.renderComponent]: location.pathname === ClientRoutesEnum.HOME,
-        })}
-      >
+        })}>
         <RenderComponent />
       </div>
       <Footer />
