@@ -1,7 +1,8 @@
 # Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-The contract link: https://kovan.etherscan.io/address/0x094cd8521864e943c61abdbb0b459a7eae7000d0
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). 
+
+Ropsten Smart Contract: https://ropsten.etherscan.io/address/0x0c3fa8371bfe2ee76a927e9f146ba6ebeee799a8
 
 ## Available Scripts
 
