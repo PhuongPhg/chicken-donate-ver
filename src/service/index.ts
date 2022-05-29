@@ -33,8 +33,6 @@ export async function saveOrganization(organization: IOrganisation) {
 export async function saveDonor(donor: IDonor) {
   const docRef = doc(db, 'donor', donor.address);
   try {
-    const dnor = await getDoc(docRef);
-    if (dnor.exists()) return;
     await setDoc(docRef, donor);
   } catch (error) {
     console.log('save donor', error);
@@ -45,7 +43,7 @@ export async function getDonor(address: string) {
   try {
     const docRef = doc(db, 'donor', address);
     const donor = await getDoc(docRef);
-    if (donor.exists()) return donor.data();
+    if (donor.exists()) return donor.data() as IDonor;
     return undefined;
   } catch (error) {
     console.log('get donor', error);
