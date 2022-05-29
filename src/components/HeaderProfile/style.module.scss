@@ -6,35 +6,57 @@
     object-fit: cover;
   }
   .profileInfo {
-    position: relative;
-    margin-top: 40px;
-    text-align: center;
-    padding: 50px 0;
-    border-bottom: 1px solid #e5e8eb;
-    .title {
-      font-size: 30px;
-      font-weight: bold;
-    }
-    .desc,
-    .curreny {
-      font-size: 20px;
-      margin: 20px 0;
-    }
-    .curreny {
-      color: #717171;
-    }
+    padding-left: 185px;
+    display: flex;
+    max-height: 100px;
     .avatar {
-      position: absolute;
-      width: 150px;
-      height: 150px;
-      top: -170px;
-      left: 50%;
-      transform: translate(-50%, 30%);
-      .avatarImg {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+      position: relative;
+      top: -80px;
+      & > img {
+        width: 200px;
+        height: 200px;
+        border: 2px solid #fafafa;
         border-radius: 50%;
+      }
+    }
+    .nameWrapper {
+      margin-left: 20px;
+      margin-top: 20px;
+      .title {
+        margin-bottom: 12px;
+        font-weight: 600;
+        font-size: 20px;
+      }
+      .desc {
+        font-weight: 400;
+        font-size: 16px;
+        width: 453px;
+      }
+    }
+    .share {
+      margin-top: 20px;
+      display: flex;
+      height: fit-content;
+      align-items: center;
+      margin-left: 150px;
+      .curreny {
+        margin-left: 12px;
+        font-weight: 600;
+        font-size: 20px;
+        color: #e85280;
+      }
+      & > button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 120px;
+        height: 40px;
+        font-weight: 400;
+        font-size: 16px;
+        background-color: transparent;
+        border-radius: 8px;
+        border: 1px solid #757575;
+        margin-left: 24px;
       }
     }
   }

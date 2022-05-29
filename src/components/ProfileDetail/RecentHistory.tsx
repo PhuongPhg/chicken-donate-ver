@@ -4,6 +4,7 @@ import { getDonor } from 'service';
 import { IDonor } from 'types/donor';
 import moment from 'moment';
 import { PRICE_OF_EACH_EGG } from 'utils/constant';
+import eggIcon from 'assets/egg-donate-box.svg';
 
 export interface IRecentHistory {
   donorId: string;
@@ -37,7 +38,9 @@ function RecentHistory(props: IProps) {
   const displayedEggs = useMemo(() => Math.round(Number(amount) / PRICE_OF_EACH_EGG), [amount]);
   return (
     <div className={classes.wrapper}>
-      <div className={classes.dot}></div>
+      <div className={classes.dot}>
+        <img src={eggIcon} alt="" />
+      </div>
       <div>
         <span style={{ fontWeight: 700 }}>{displayedName}</span>
         {isWithdrawTransaction ? (

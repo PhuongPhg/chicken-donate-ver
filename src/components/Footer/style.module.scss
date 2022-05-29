@@ -1,0 +1,23 @@
+.container {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 185px;
+  height: 72px;
+  .left {
+    font-weight: 500;
+    font-size: 16px;
+    color: #757575;
+    & > span {
+      margin-right: 40px;
+    }
+  }
+  .right {
+    display: flex;
+    align-items: center;
+    & > img {
+      margin-left: 15px;
+    }
+  }
+}
