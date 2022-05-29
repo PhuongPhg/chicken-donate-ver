@@ -1,13 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >0.4.23 <0.9.0;
 
-// import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract Organization {
+contract Organization is Ownable {
   string public name;
   address public id;
   uint public totalDonations;
-  address public Owner;
 
   struct Donation {
     address donorId;
@@ -27,13 +26,7 @@ contract Organization {
     name = _name;
     id = _id;
     totalDonations = 0;
-    Owner = msg.sender;
   }
-
-  function transferOwnership(address _newOwner) public {
-      require(msg.sender == Owner);
-      Owner = _newOwner;  
-    }
 
   event donationCreated (address _from, uint _amount, uint _time);
   event withDrawSuccess (WithdrawHistory _history);
@@ -45,8 +38,7 @@ contract Organization {
     emit donationCreated(msg.sender, _amount, block.timestamp);
   }
 
-  function withdraw () public payable {
-    require(Owner == msg.sender, "Only owner can withdraw");
+  function withdraw () public payable onlyOwner{
     WithdrawHistory memory history = WithdrawHistory(address(this).balance, block.timestamp);
     histories.push(history);
     payable(id).transfer(address(this).balance);
@@ -70,4 +62,5 @@ contract Organization {
   // function isOwner() public view returns (bool) {
   //   return address(this) == msg.sender;
   // }
+
 }
