@@ -1,0 +1,27 @@
+.filterContainer {
+    display: flex;
+    margin: 0 0 0 20px;
+    justify-content: center;
+
+    .filterItem {
+        margin: 10px;
+        text-decoration: none;
+        color: #111827;
+        padding: 8px;
+        line-height: 24px;
+        border-radius: 8px;
+        background-color: #FFFFFF;
+        border: none;
+        outline: none !important;
+        cursor: pointer;
+        font-size: 16px;
+
+    }
+
+    .filterItem:hover {
+        margin: 10px;
+        text-decoration: none;
+        background-color: #E85280;
+        color: #FFFFFF;
+    }
+}

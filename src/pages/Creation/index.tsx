@@ -110,8 +110,11 @@ function Creation() {
                 list="type"
               />
               <datalist id="type">
+                <option value="Video Creators" />
                 <option value="Artist" />
                 <option value="Youtuber" />
+                <option value="Gaming" />
+                <option value="Podcasters" />
                 <option value="Charity" />
               </datalist>
             </div>
