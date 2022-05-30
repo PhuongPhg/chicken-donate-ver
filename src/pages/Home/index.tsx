@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import classes from './style.module.scss';
 import Intro from 'components/Intro';
 import CardItem from 'components/CardItem';
 import CategoryFilter from 'components/CategoryFilter';
-import InputPage from 'components/Intro/inputPage';
+import InputPage from 'components/Intro/InputPage';
 import { getOrganisationList } from 'service';
-import { IOrganisation } from 'types/organisation';
+import { ECategoryTypes, IOrganisation } from 'types/organisation';
+import xor from 'lodash/xor';
 
 function Home() {
   const [organisationList, setOrganisationList] = useState<IOrganisation[]>([]);
+  const [categoryFilters, setCategoryFilters] = useState<ECategoryTypes[]>([]);
 
   const fetchData = async () => {
     try {
@@ -23,13 +25,24 @@ function Home() {
     fetchData();
   }, []);
 
+  const displayOrganizations = useMemo(
+    () =>
+      categoryFilters?.length > 0 ? organisationList.filter(o => categoryFilters.includes(o.type)) : organisationList,
+    [organisationList, categoryFilters],
+  );
+
+  const handleSelectCategory = useCallback(
+    (e: ECategoryTypes) => setCategoryFilters(preValue => xor(preValue, [e])),
+    [],
+  );
+
   return (
     <div>
       <Intro />
-      <InputPage/>
-      <CategoryFilter/>
+      <InputPage />
+      <CategoryFilter categoryFilters={categoryFilters} onSelect={handleSelectCategory} />
       <div className={classes.cardListWrapper}>
-        {organisationList.map(organisation => (
+        {displayOrganizations.map(organisation => (
           <CardItem {...organisation} key={organisation.addressId} />
         ))}
       </div>

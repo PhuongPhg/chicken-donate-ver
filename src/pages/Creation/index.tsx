@@ -7,7 +7,7 @@ import { IOrganisation } from 'types/organisation';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from 'firestore';
 import { createOrganization } from 'ethereum';
-import { PRICE_FOR_CREATING_ACCOUNT } from 'utils/constant';
+import { CATEGORY_LIST, PRICE_FOR_CREATING_ACCOUNT } from 'utils/constant';
 import background from 'assets/background.jpg';
 import cameraIcon from 'assets/camera.png';
 
@@ -110,12 +110,9 @@ function Creation() {
                 list="type"
               />
               <datalist id="type">
-                <option value="Video Creators" />
-                <option value="Artist" />
-                <option value="Youtuber" />
-                <option value="Gaming" />
-                <option value="Podcasters" />
-                <option value="Charity" />
+                {CATEGORY_LIST.map(({ title, value }) => (
+                  <option value={value} title={title} />
+                ))}
               </datalist>
             </div>
             <div className={classes.description}>
@@ -140,7 +137,8 @@ function Creation() {
             <button
               className={clsx(classes.createBtn, { [classes.activeCreate]: enable })}
               onClick={handleCreate}
-              disabled={!enable}>
+              disabled={!enable}
+            >
               Create a organization with only {PRICE_FOR_CREATING_ACCOUNT} ETH
             </button>
           </div>

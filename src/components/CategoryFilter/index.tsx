@@ -1,17 +1,28 @@
-import React from 'react';
+import clsx from 'clsx';
+import React, { useCallback } from 'react';
+import { ECategoryTypes } from 'types/organisation';
+import { CATEGORY_LIST } from 'utils/constant';
 import classes from './style.module.scss';
 
-function categoryFilter() {
-    return (
-        <div className={classes.filterContainer}>
-            <button className={classes.filterItem}>Video Creators</button>
-            <button className={classes.filterItem}>Artist</button>
-            <button className={classes.filterItem}>Youtuber</button>
-            <button className={classes.filterItem}>Gaming</button>
-            <button className={classes.filterItem}>Podcasters</button>
-            <button className={classes.filterItem}>Charity</button>
-        </div>
-    )
+interface IProps {
+  categoryFilters?: ECategoryTypes[];
+  onSelect: (e: ECategoryTypes) => void;
+}
+function CategoryFilter({ categoryFilters = [], onSelect }: IProps) {
+  const isSelected = useCallback((value: ECategoryTypes) => categoryFilters.includes(value), [categoryFilters]);
+
+  return (
+    <div className={classes.filterContainer}>
+      {CATEGORY_LIST.map(({ title, value }) => (
+        <button
+          className={clsx(classes.filterItem, isSelected(value) && classes.selectedFilterItem)}
+          onClick={() => onSelect(value)}
+        >
+          {title}
+        </button>
+      ))}
+    </div>
+  );
 }
 
-export default categoryFilter;
+export default CategoryFilter;

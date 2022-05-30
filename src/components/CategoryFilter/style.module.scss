@@ -18,7 +18,7 @@
 
     }
 
-    .filterItem:hover {
+    .selectedFilterItem, .filterItem:hover {
         margin: 10px;
         text-decoration: none;
         background-color: #E85280;
