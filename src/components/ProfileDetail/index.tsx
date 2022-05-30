@@ -107,12 +107,14 @@ function ProfileDetail(props: IOrganisation) {
         <div style={{ display: 'flex' }}>
           <div
             className={clsx(classes.supported, { [classes.active]: recentHistory === RecentHistoryEnum.DONOR })}
-            onClick={() => setRecentHistory(RecentHistoryEnum.DONOR)}>
+            onClick={() => setRecentHistory(RecentHistoryEnum.DONOR)}
+          >
             RECENT DONORS
           </div>
           <div
             className={clsx(classes.supported, { [classes.active]: recentHistory === RecentHistoryEnum.WITHDRAWS })}
-            onClick={() => handleGetHistories(true)}>
+            onClick={() => handleGetHistories(true)}
+          >
             RECENT WITHDRAW
           </div>
         </div>
@@ -157,7 +159,8 @@ function ProfileDetail(props: IOrganisation) {
               <button
                 key={ele}
                 onClick={() => handleSelectEggs(ele)}
-                className={clsx({ [classes.acticeBtn]: eggs === ele })}>
+                className={clsx({ [classes.acticeBtn]: eggs === ele })}
+              >
                 {ele}
               </button>
             ))}

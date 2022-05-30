@@ -6,7 +6,7 @@ export interface IOrganisation {
   name: string;
   photoUrl: string;
   briefDes: string;
-  type: string;
+  type: ECategoryTypes;
   contractAddress: string;
 }
 export interface IDonationsEthers {
@@ -18,4 +18,12 @@ export interface IDonationsEthers {
 export interface IWithdrawTransaction {
   amount: BigNumber;
   time: BigNumber;
+}
+export enum ECategoryTypes {
+  VIDEO_CREATORS = 'VIDEO_CREATORS',
+  CHARITY = 'CHARITY',
+  ARTIST = 'ARTIST',
+  YOUTUBER = 'YOUTUBER',
+  GAMING = 'GAMING',
+  PODCASTERS = 'PODCASTERS',
 }

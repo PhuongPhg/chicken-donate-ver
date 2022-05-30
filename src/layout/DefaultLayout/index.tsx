@@ -20,7 +20,8 @@ function DefaultLayout(props: ILayout) {
       <div
         className={clsx({
           [classes.renderComponent]: location.pathname === ClientRoutesEnum.HOME,
-        })}>
+        })}
+      >
         <RenderComponent />
       </div>
       <Footer />
