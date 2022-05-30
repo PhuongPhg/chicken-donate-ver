@@ -5,6 +5,7 @@ import { IOrganisation } from 'types/organisation';
 import classes from './style.module.scss';
 import eggIcon from 'assets/egg-donate.svg';
 import shareIcon from 'assets/share.png';
+import { useContractEventListener } from 'hooks/useContractEventListener';
 
 function Header(props: IOrganisation) {
   const { description, name, photoUrl, addressId } = props;
@@ -37,6 +38,8 @@ function Header(props: IOrganisation) {
     getSigners();
   }, []);
 
+  useContractEventListener(addressId, fetchData, fetchData);
+
   const isOwner = useMemo(
     () => currentSignerAddress?.toLowerCase() === addressId?.toLowerCase(),
     [addressId, currentSignerAddress],
@@ -51,16 +54,16 @@ function Header(props: IOrganisation) {
       <img src={background} alt="" className={classes.background} />
 
       <div className={classes.profileInfo}>
-        <div className={classes.avatar}>
-          <img src={photoUrl} alt="" className={classes.avatarImg} />
-        </div>
-        <div className={classes.nameWrapper}>
-          <div className={classes.title}>
-            {name}
-            {isOwner && <button onClick={onWithdraw}>Withdraw</button>}
+        <div className={classes.infoWrapper}>
+          <div className={classes.avatar}>
+            <img src={photoUrl} alt="" className={classes.avatarImg} />
           </div>
-          <div className={classes.desc}>{description}</div>
+          <div className={classes.nameWrapper}>
+            <div className={classes.title}>{name}</div>
+            <div className={classes.desc}>{description}</div>
+          </div>
         </div>
+
         <div className={classes.share}>
           <img src={eggIcon} alt="" width={24} height={24} />
           <div className={classes.curreny}>{amount} ETH</div>
@@ -68,12 +71,12 @@ function Header(props: IOrganisation) {
             <img src={shareIcon} alt="" style={{ marginRight: 12 }} />
             <span>Share</span>
           </button>
-          <button style={{ backgroundColor: '#E85280', fontWeight: 600, color: 'white' }}>Follow</button>
+          {isOwner && (
+            <button style={{ backgroundColor: '#E85280', fontWeight: 600, color: 'white' }} onClick={onWithdraw}>
+              Withdraw
+            </button>
+          )}
         </div>
-        {/* <div>
-          <button>Share</button>
-          {isOwner && <button onClick={onWithdraw}>Withdraw</button>}
-        </div> */}
       </div>
     </div>
   );

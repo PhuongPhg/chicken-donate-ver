@@ -1,21 +1,20 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import classes from './style.module.scss';
-import heartIcon from 'assets/heart.svg';
-import lockIcon from 'assets/lock.svg';
 import eggIcon from 'assets/egg-donate-box.svg';
+import facebookIcon from 'assets/facebook.png';
+import heartIcon from 'assets/heart.svg';
+import instaIcon from 'assets/insta.png';
+import lockIcon from 'assets/lock.svg';
+import tiktokIcon from 'assets/toptop.png';
+import twitterIcon from 'assets/twitter.png';
 import xIcon from 'assets/x.svg';
-import { IOrganisation } from 'types/organisation';
-import { donate, getDonations, getOrganizationContract, getWithdrawTransaction, signer } from 'ethereum';
 import clsx from 'clsx';
+import { donate, getDonations, getWithdrawTransaction, signer } from 'ethereum';
+import { useContractEventListener } from 'hooks/useContractEventListener';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { saveDonor } from 'service';
+import { IOrganisation } from 'types/organisation';
 import { PRICE_OF_EACH_EGG } from 'utils/constant';
 import RecentHistory, { IRecentHistory } from './RecentHistory';
-import { EContractEvents } from 'enums/contract';
-import { Contract } from 'ethers';
-import facebookIcon from 'assets/facebook.png';
-import twitterIcon from 'assets/twitter.png';
-import tiktokIcon from 'assets/toptop.png';
-import instaIcon from 'assets/insta.png';
+import classes from './style.module.scss';
 
 enum RecentHistoryEnum {
   DONOR = 'DONOR',
@@ -73,19 +72,7 @@ function ProfileDetail(props: IOrganisation) {
     handleGetDonations();
   }, [handleGetDonations]);
 
-  useEffect(() => {
-    let contract: Contract;
-    (async () => {
-      contract = await getOrganizationContract(addressId);
-      contract.on(EContractEvents.DONATION_CREATED, handleGetDonations);
-      contract.on(EContractEvents.WITHDRAW_SUCCESS, () => handleGetHistories(false));
-    })();
-
-    return () => {
-      contract?.off(EContractEvents.DONATION_CREATED, handleGetDonations);
-      contract?.off(EContractEvents.WITHDRAW_SUCCESS, () => handleGetHistories(false));
-    };
-  }, [addressId, handleGetDonations, handleGetHistories]);
+  useContractEventListener(addressId, handleGetDonations, () => handleGetHistories(false));
 
   return (
     <div className={classes.container}>
