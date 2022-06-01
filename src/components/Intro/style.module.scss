@@ -4,12 +4,18 @@
 
   .textCenter {
     text-align: center;
-
+    .topTitle{
+      font-size: 24px;
+      color: #4B5563;
+      margin-bottom: 16px;
+      line-height: 36px;
+    }
     .introTitle {
-      font-size: 64px;
+      font-size: 54px;
       font-weight: bold;
-      width: 800px;
-      line-height: 80px;
+      width: 900px;
+      line-height: 81px;
+      color: #111827;
     }
 
     .subTitleWrapper {
@@ -18,14 +24,23 @@
 
       .subTitle {
         line-height: 30px;
-        font-size: 22px;
+        font-size: 24px;
         margin-top: 16px;
-        width: 600px;
+        width: 800px;
+        color: #4B5563;
       }
     }
   }
 }
-
+.bottomIntro{
+  padding: 100px 0;
+}
+.bg1{
+  background-color: #FDF2F6;
+}
+.bg2{
+  background-color: #FAFAFA;
+}
 .inputPage {
   padding: 10px 20px;
   width: fit-content;
