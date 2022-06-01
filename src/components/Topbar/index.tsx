@@ -14,7 +14,7 @@ function Topbar(props: ITopBar) {
     <div className={clsx(classes.container, className)}>
       <img src={logo} alt="" className={classes.logo} />
       <Link to="/" className={classes.link}>
-        <div className={classes.home}>Home</div>
+        <div className={clsx(classes.home)}>Home</div>
       </Link>
       <div>Do not be a chicken !!!</div>
       <Link to="/create" className={classes.linkCreate}>

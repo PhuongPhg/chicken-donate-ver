@@ -4,6 +4,7 @@ import Intro from 'components/Intro';
 import CardItem from 'components/CardItem';
 import CategoryFilter from 'components/CategoryFilter';
 import InputPage from 'components/Intro/InputPage';
+import BottomIntro from 'components/Intro/bottomIntro';
 import { getOrganisationList } from 'service';
 import { ECategoryTypes, IOrganisation } from 'types/organisation';
 import xor from 'lodash/xor';
@@ -46,6 +47,7 @@ function Home() {
           <CardItem {...organisation} key={organisation.addressId} />
         ))}
       </div>
+      <BottomIntro/>
     </div>
   );
 }

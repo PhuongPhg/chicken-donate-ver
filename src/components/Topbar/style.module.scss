@@ -30,11 +30,18 @@
 
     .home {
       margin: 0 20px;
-      background-color: #ffdd00;
+      color: #000000;
+      background-color: #FFFFFF;
       padding: 10px 20px;
       border-radius: 40px;
       transition: all 0.3s ease;
     }
+    .home:hover {
+      
+      text-decoration: none;
+      background-color: #E85280;
+      color: #FFFFFF;
+  }
   }
 
   .linkCreate {
