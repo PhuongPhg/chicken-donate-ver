@@ -15,6 +15,9 @@
         object-fit: cover;
         border-radius: 8px;
       }
+      p {
+        word-break: break-word;
+      }
       // .detail {
       //   // display: flex;
       //   // align-items: center;
@@ -24,6 +27,7 @@
       .media {
         & > p {
           font-weight: 500;
+
         }
         & > img {
           margin-right: 12px;
@@ -144,6 +148,11 @@
           font-weight: 600;
           font-size: 16px;
           color: white;
+        }
+        & > button:disabled {
+          background-color: white;
+          border: 2px solid #e85280;
+          color: #e85280;
         }
       }
     }

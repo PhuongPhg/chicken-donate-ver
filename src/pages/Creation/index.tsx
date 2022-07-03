@@ -87,7 +87,7 @@ function Creation() {
                 )}
               </div>
             </label>
-            <input type="file" id="filechange" style={{ display: 'none' }} onChange={handleChangeAvatar} />
+            <input type="file" id="filechange" style={{ display: 'none' }} onChange={handleChangeAvatar} accept="image/*" />
           </div>
           <div className={classes.infomation}>
             <h1 className={classes.heading}>Create Organization</h1>

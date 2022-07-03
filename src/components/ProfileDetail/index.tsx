@@ -7,6 +7,7 @@ import tiktokIcon from 'assets/toptop.png';
 import twitterIcon from 'assets/twitter.png';
 import xIcon from 'assets/x.svg';
 import clsx from 'clsx';
+import StyledButton from 'components/StyledButton';
 import { donate, getDonations, getWithdrawTransaction, signer } from 'ethereum';
 import { useContractEventListener } from 'hooks/useContractEventListener';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -24,7 +25,7 @@ enum RecentHistoryEnum {
 function ProfileDetail(props: IOrganisation) {
   const { description, photoUrl, name, addressId } = props;
 
-  const [donorName, setDonorName] = useState<string>();
+  const [donorName, setDonorName] = useState<string>('');
   const [eggs, setEggs] = useState<number>(1);
   const [donations, setDonations] = useState<IRecentHistory[]>([]);
   const [recentHistory, setRecentHistory] = useState<RecentHistoryEnum>(RecentHistoryEnum.DONOR);
@@ -36,13 +37,19 @@ function ProfileDetail(props: IOrganisation) {
 
   const totalPrice = useMemo(() => eggs * PRICE_OF_EACH_EGG, [eggs]);
 
-  const handleClick = async () => {
-    if (donorName) {
-      const addressWallet = await signer.getAddress();
-      await saveDonor({ name: donorName, address: addressWallet });
-      await donate(addressId, totalPrice);
-    }
-  };
+  const isDisabledButton = useMemo(() => !donorName || !eggs, [donorName, eggs])
+
+  const handleClick = useCallback(
+    async () => {
+      if (isDisabledButton) {
+        const addressWallet = await signer.getAddress();
+        await saveDonor({ name: donorName, address: addressWallet });
+        await donate(addressId, totalPrice);
+      }
+    },
+    [isDisabledButton, donorName, addressId, totalPrice],
+  )
+  ;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEggs(Number(e.target.value));
@@ -157,7 +164,7 @@ function ProfileDetail(props: IOrganisation) {
             <p>
               An Egg is equal {PRICE_OF_EACH_EGG} ETH (Your donate is {totalPrice.toFixed(4)} ETH)
             </p>
-            <button onClick={handleClick}>Support {eggs} eggs</button>
+            <StyledButton title={`Support ${eggs} eggs`} disabled={isDisabledButton} onClick={handleClick} />
           </div>
         </div>
       </div>

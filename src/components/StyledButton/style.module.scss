@@ -1,0 +1,17 @@
+button, .disabledButton {
+  background-color: #e85280;
+  width: 100%;
+  height: 60px;
+  border-radius: 8px;
+  border: none;
+  margin-top: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  color: white;
+}
+.disabledButton, button:disabled {
+  background-color: white;
+  border: 2px solid #e85280;
+  color: #e85280;
+}
