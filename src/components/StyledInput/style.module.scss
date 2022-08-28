@@ -1,0 +1,28 @@
+.input {
+  height: 50px;
+  border: 1px solid #000000;
+  border-radius: 8px;
+  margin-top: 20px;
+  padding: 0 20px;
+  width: calc(100% - 40px);
+  .select {
+    width: 50x !important;
+  }
+}
+.container {
+  position: relative;
+  width: 100%;
+}
+.maxLengthContainer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 14px;
+}
+.errorInput {
+  border: 1px solid #e85280 !important;
+}
+.errorMessageTxt {
+  font-size: 14px;
+  color: #e85280;
+}

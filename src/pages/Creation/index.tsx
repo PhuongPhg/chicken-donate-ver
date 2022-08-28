@@ -1,66 +1,29 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import classes from './style.module.scss';
-import clsx from 'clsx';
-import { useNavigate } from 'react-router-dom';
-import { saveOrganization } from 'service';
-import { IOrganisation } from 'types/organisation';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { storage } from 'firestore';
-import { createOrganization } from 'ethereum';
-import { CATEGORY_LIST, PRICE_FOR_CREATING_ACCOUNT } from 'utils/constant';
 import background from 'assets/background.jpg';
 import cameraIcon from 'assets/camera.png';
+import clsx from 'clsx';
+import StyledInput from 'components/StyledInput/StyledInput';
+import { createOrganization } from 'ethereum';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { storage } from 'firestore';
+import { Field, Formik } from 'formik';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { saveOrganization } from 'service';
+import { ECategoryTypes, IOrganisation } from 'types/organisation';
+import { CATEGORY_LIST, PRICE_FOR_CREATING_ACCOUNT } from 'utils/constant';
+import * as Yup from 'yup';
+import classes from './style.module.scss';
 
 function Creation() {
   const navigate = useNavigate();
-
-  const [name, setName] = useState<string>();
-  const [type, setType] = useState<string>();
-  const [des, setDes] = useState<string>();
-  const [shortdes, setShortDes] = useState<string>();
   const [avatarPreveiw, setAvatarPreveiw] = useState<string>();
   const [imgUpload, setImgUpload] = useState<any>();
 
-  const enable = useMemo(() => {
-    const organisationInfo = {
-      description: des,
-      name,
-      type,
-      photoUrl: avatarPreveiw,
-      briefDes: shortdes,
-    };
-    return Object.values(organisationInfo).every(ele => ele);
-  }, [des, name, type, avatarPreveiw, shortdes]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setType(e.target.value);
-  };
 
   const handleChangeAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setImgUpload(e.target.files[0]);
       setAvatarPreveiw(URL.createObjectURL(e.target.files[0]));
-    }
-  };
-
-  const handleCreate = async () => {
-    if (enable) {
-      const res = await createOrganization(name || '');
-      const avatarImagesRef = ref(storage, `images/avatar-organization/${imgUpload.name.replace(/\s+/g, '')}`);
-      await uploadBytes(avatarImagesRef, imgUpload);
-      const avatarUrl = await getDownloadURL(
-        ref(storage, `images/avatar-organization/${imgUpload.name.replace(/\s+/g, '')}`),
-      );
-      await saveOrganization({
-        addressId: res.from,
-        name,
-        briefDes: shortdes,
-        description: des,
-        photoUrl: avatarUrl,
-        type: type,
-        contractAddress: res.contractAddress,
-      } as IOrganisation);
-      navigate('/');
     }
   };
 
@@ -70,79 +33,133 @@ function Creation() {
     };
   }, [avatarPreveiw]);
 
+  const initialValues = useMemo(
+    () => ({
+      addressId: '',
+      slug: '',
+      name: '',
+      briefDes: '',
+      description: '',
+      type: ECategoryTypes.CHARITY,
+      contractAddress: '',
+      photoUrl: '',
+    }),
+    [],
+  );
+
+  const organizationSchema = useMemo(
+    () =>
+      Yup.object().shape({
+        name: Yup.string().required('This field is required').max(20, 'Maximum characters for name is 20'),
+        briefDes: Yup.string()
+          .required('This field is required')
+          .max(50, 'Maximum characters for brief description is 50'),
+        description: Yup.string()
+          .required('This field is required')
+          .max(300, 'Maximum characters for description is 300'),
+        photoUrl: Yup.string().required('This field is required'),
+      }),
+    [],
+  );
+
+  const handleOnSubmit = useCallback(
+    async (values: Partial<IOrganisation>) => {
+      const res = await createOrganization(values.name || '');
+      const avatarImagesRef = ref(storage, `images/avatar-organization/${values?.photoUrl?.replace(/\s+/g, '')}`);
+      await uploadBytes(avatarImagesRef, imgUpload);
+      const avatarUrl = await getDownloadURL(
+        ref(storage, `images/avatar-organization/${imgUpload.name.replace(/\s+/g, '')}`),
+      );
+      await saveOrganization({
+        ...values,
+        addressId: res.from,
+        photoUrl: avatarUrl,
+        contractAddress: res.contractAddress,
+      } as IOrganisation);
+      navigate('/');
+    },
+    [imgUpload, navigate],
+  );
+
   return (
     <>
       <div className={classes.background}>
         <img src={background} alt="" />
       </div>
       <div style={{ padding: '0 135px' }}>
-        <div className={classes.main}>
-          <div className={classes.upload}>
-            <label htmlFor="filechange">
-              <div className={clsx(classes.camera, { [classes.unsetborder]: avatarPreveiw })}>
-                {!avatarPreveiw ? (
-                  <img src={cameraIcon} alt="" width={24} height={18} />
-                ) : (
-                  <img src={avatarPreveiw} alt="" className={classes.avatar} />
-                )}
+        <Formik initialValues={initialValues} onSubmit={handleOnSubmit} validationSchema={organizationSchema}>
+          {({ handleChange, values, isValid, handleSubmit, errors, touched }) => (
+            <form onSubmit={handleSubmit}>
+              <div className={classes.main}>
+                <div className={classes.upload}>
+                  <label htmlFor="photoUrl">
+                    <div
+                      className={clsx(classes.camera, {
+                        [classes.unsetborder]: avatarPreveiw,
+                        [classes.errorAvatarBorder]: errors.photoUrl && touched,
+                      })}>
+                      {!avatarPreveiw ? (
+                        <img src={cameraIcon} alt="" width={24} height={18} />
+                      ) : (
+                        <img src={avatarPreveiw} alt="" className={classes.avatar} />
+                      )}
+                    </div>
+                  </label>
+                  <input
+                    type="file"
+                    id="photoUrl"
+                    style={{ display: 'none' }}
+                    onChange={e => {
+                      handleChange(e);
+                      handleChangeAvatar(e);
+                    }}
+                    accept="image/*"
+                  />
+                </div>
+                <div className={classes.infomation}>
+                  <h1 className={classes.heading}>Create Organization</h1>
+                  <div className={classes.form}>
+                    <StyledInput
+                      id="name"
+                      placeholder="Organization name"
+                      onChange={handleChange}
+                      value={values.name || ''}
+                      errorMessage={touched && errors.name ? errors.name : ''}
+                    />
+                    <Field as="select" name="type" className={classes.input}>
+                      {CATEGORY_LIST.map(({ title, value }) => (
+                        <option value={value}>{title}</option>
+                      ))}
+                    </Field>
+                  </div>
+                  <div className={classes.description}>
+                    <textarea
+                      id="description"
+                      placeholder="Description, write about here"
+                      onChange={handleChange}
+                      className={clsx({ [classes.errorInput]: touched && errors.description })}
+                    />
+                  </div>
+                  {touched && errors.description && <div className={classes.errorMessageTxt}>{errors.description}</div>}
+
+                  <StyledInput
+                    id="briefDes"
+                    placeholder="Brief description"
+                    onChange={handleChange}
+                    value={values.briefDes || ''}
+                    errorMessage={touched && errors.briefDes ? errors.briefDes : ''}
+                  />
+                  <button
+                    className={clsx(classes.createBtn, { [classes.activeCreate]: isValid })}
+                    disabled={!isValid}
+                    type="submit">
+                    Create a organization with only {PRICE_FOR_CREATING_ACCOUNT} ETH
+                  </button>
+                </div>
               </div>
-            </label>
-            <input type="file" id="filechange" style={{ display: 'none' }} onChange={handleChangeAvatar} accept="image/*" />
-          </div>
-          <div className={classes.infomation}>
-            <h1 className={classes.heading}>Create Organization</h1>
-            <div className={classes.form}>
-              <input
-                id="name"
-                className={classes.input}
-                placeholder="Organization name"
-                onChange={e => {
-                  setName(e.target.value);
-                }}
-              />
-
-              <input
-                name="type"
-                className={classes.input}
-                placeholder="Youtuber"
-                value={type}
-                onChange={handleChange}
-                list="type"
-              />
-              <datalist id="type">
-                {CATEGORY_LIST.map(({ title, value }) => (
-                  <option value={value} title={title} />
-                ))}
-              </datalist>
-            </div>
-            <div className={classes.description}>
-              <textarea
-                id="des"
-                placeholder="description, write about here"
-                onChange={e => {
-                  setDes(e.target.value);
-                }}
-              />
-            </div>
-
-            <input
-              id="shortdes"
-              className={classes.input}
-              placeholder="brief description"
-              onChange={e => {
-                setShortDes(e.target.value);
-              }}
-            />
-
-            <button
-              className={clsx(classes.createBtn, { [classes.activeCreate]: enable })}
-              onClick={handleCreate}
-              disabled={!enable}
-            >
-              Create a organization with only {PRICE_FOR_CREATING_ACCOUNT} ETH
-            </button>
-          </div>
-        </div>
+            </form>
+          )}
+        </Formik>
       </div>
       <div className={classes.overlay}></div>
     </>
