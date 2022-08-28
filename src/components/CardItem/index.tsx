@@ -21,8 +21,10 @@ function CardItem(props: IOrganisation) {
   }, [addressId]);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    if(addressId){
+      fetchData();
+    }
+  }, [fetchData, addressId]);
 
   return (
     <div className={classes.cardWrapper} onClick={handleClick}>

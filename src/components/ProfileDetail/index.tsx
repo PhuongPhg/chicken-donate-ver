@@ -41,7 +41,7 @@ function ProfileDetail(props: IOrganisation) {
 
   const handleClick = useCallback(
     async () => {
-      if (isDisabledButton) {
+      if (!isDisabledButton) {
         const addressWallet = await signer.getAddress();
         await saveDonor({ name: donorName, address: addressWallet });
         await donate(addressId, totalPrice);
@@ -76,8 +76,10 @@ function ProfileDetail(props: IOrganisation) {
   );
 
   useEffect(() => {
-    handleGetDonations();
-  }, [handleGetDonations]);
+    if(addressId){
+      handleGetDonations();
+    }
+  }, [handleGetDonations, addressId]);
 
   useContractEventListener(addressId, handleGetDonations, () => handleGetHistories(false));
 

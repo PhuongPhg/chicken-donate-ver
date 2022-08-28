@@ -8,12 +8,17 @@ export const useContractEventListener = (
   onDonationCreated: () => void,
   onWithdrawSuccess: () => void,
 ) => {
+
   useEffect(() => {
     let contract: Contract;
     (async () => {
-      contract = await getOrganizationContract(addressId);
-      contract.on(EContractEvents.DONATION_CREATED, onDonationCreated);
-      contract.on(EContractEvents.WITHDRAW_SUCCESS, onWithdrawSuccess);
+      if(!!addressId){
+        await getOrganizationContract(addressId).then((res: Contract) => {
+          contract = res;
+          contract.on(EContractEvents.DONATION_CREATED, onDonationCreated);
+          contract.on(EContractEvents.WITHDRAW_SUCCESS, onWithdrawSuccess);
+        })
+      }
     })();
 
     return () => {

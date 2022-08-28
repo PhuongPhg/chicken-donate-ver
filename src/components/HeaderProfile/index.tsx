@@ -18,8 +18,10 @@ function Header(props: IOrganisation) {
   }, [addressId]);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    if (addressId) {
+      fetchData();
+    }
+  }, [fetchData, addressId]);
 
   const handleChangeAccounts = useCallback((accounts: string[]) => setCurrentSignerAddress(accounts[0]), []);
 
@@ -67,9 +69,9 @@ function Header(props: IOrganisation) {
         <div className={classes.share}>
           <img src={eggIcon} alt="" width={24} height={24} />
           <div className={classes.curreny}>{amount} ETH</div>
-          <button>
+          <button style={{ margin: '0 0 0 20px'}}>
             <img src={shareIcon} alt="" style={{ marginRight: 12 }} />
-            <span>Share</span>
+            <span style={{ color: 'black' }}>Share</span>
           </button>
           {isOwner && (
             <button style={{ backgroundColor: '#E85280', fontWeight: 600, color: 'white' }} onClick={onWithdraw}>
