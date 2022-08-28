@@ -9,15 +9,18 @@
     font-weight: 500;
     font-size: 16px;
     color: #757575;
-    & > span {
+    & > span, a {
       margin-right: 40px;
+      text-decoration: none;
+      color: #757575
     }
   }
   .right {
     display: flex;
     align-items: center;
-    & > img {
+    & > a {
       margin-left: 15px;
+      cursor: pointer;
     }
   }
 }
