@@ -8,6 +8,7 @@ export interface IOrganisation {
   briefDes: string;
   type: ECategoryTypes;
   contractAddress: string;
+  slug?: string;
 }
 export interface IDonationsEthers {
   amount: BigNumber;
