@@ -12,7 +12,7 @@ declare global {
 }
 
 const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS;
-const provider = new ethers.providers.Web3Provider(window.ethereum);
+export const provider = new ethers.providers.Web3Provider(window.ethereum);
 export const signer = provider.getSigner();
 
 export async function ConnectWallet() {

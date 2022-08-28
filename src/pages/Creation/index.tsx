@@ -13,15 +13,20 @@ import { ECategoryTypes, IOrganisation } from 'types/organisation';
 import { CATEGORY_LIST, PRICE_FOR_CREATING_ACCOUNT } from 'utils/constant';
 import * as Yup from 'yup';
 import classes from './style.module.scss';
+import { isFileImage } from 'utils/file-check';
 
 function Creation() {
   const navigate = useNavigate();
   const [avatarPreveiw, setAvatarPreveiw] = useState<string>();
   const [imgUpload, setImgUpload] = useState<any>();
 
+  const [validImg, setValidImg] = useState<boolean>(false);
+  const [validAdress, setValidAdress] = useState<boolean>(false);
+
 
   const handleChangeAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
+      setValidImg(false);
       setImgUpload(e.target.files[0]);
       setAvatarPreveiw(URL.createObjectURL(e.target.files[0]));
     }
@@ -64,6 +69,10 @@ function Creation() {
 
   const handleOnSubmit = useCallback(
     async (values: Partial<IOrganisation>) => {
+      if (!isFileImage(imgUpload)) {
+        setValidImg(true);
+        return;
+      }
       const res = await createOrganization(values.name || '');
       const avatarImagesRef = ref(storage, `images/avatar-organization/${values?.photoUrl?.replace(/\s+/g, '')}`);
       await uploadBytes(avatarImagesRef, imgUpload);
@@ -116,6 +125,8 @@ function Creation() {
                     accept="image/*"
                   />
                 </div>
+                {validImg && <p style={{ color: 'red' }}>Image is not valid</p>}
+                {validAdress && <p style={{ color: 'red' }}>Address already existed</p>}
                 <div className={classes.infomation}>
                   <h1 className={classes.heading}>Create Organization</h1>
                   <div className={classes.form}>
