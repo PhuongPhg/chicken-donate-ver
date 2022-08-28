@@ -21,8 +21,7 @@ function Creation() {
   const [imgUpload, setImgUpload] = useState<any>();
 
   const [validImg, setValidImg] = useState<boolean>(false);
-  const [validAdress, setValidAdress] = useState<boolean>(false);
-
+  const [validAddress, setValidAddress] = useState<boolean>(false);
 
   const handleChangeAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -69,23 +68,28 @@ function Creation() {
 
   const handleOnSubmit = useCallback(
     async (values: Partial<IOrganisation>) => {
-      if (!isFileImage(imgUpload)) {
-        setValidImg(true);
-        return;
+      try {
+        if (!isFileImage(imgUpload)) {
+          setValidImg(true);
+          return;
+        }
+        const res = await createOrganization(values.name || '');
+        const avatarImagesRef = ref(storage, `images/avatar-organization/${values?.photoUrl?.replace(/\s+/g, '')}`);
+        await uploadBytes(avatarImagesRef, imgUpload);
+        const avatarUrl = await getDownloadURL(
+          ref(storage, `images/avatar-organization/${imgUpload.name.replace(/\s+/g, '')}`),
+        );
+        await saveOrganization({
+          ...values,
+          addressId: res.from,
+          photoUrl: avatarUrl,
+          contractAddress: res.contractAddress,
+        } as IOrganisation);
+        navigate('/');
+      } catch (error) {
+        // TODO: add toast/notification modal for error
+        setValidAddress(true);
       }
-      const res = await createOrganization(values.name || '');
-      const avatarImagesRef = ref(storage, `images/avatar-organization/${values?.photoUrl?.replace(/\s+/g, '')}`);
-      await uploadBytes(avatarImagesRef, imgUpload);
-      const avatarUrl = await getDownloadURL(
-        ref(storage, `images/avatar-organization/${imgUpload.name.replace(/\s+/g, '')}`),
-      );
-      await saveOrganization({
-        ...values,
-        addressId: res.from,
-        photoUrl: avatarUrl,
-        contractAddress: res.contractAddress,
-      } as IOrganisation);
-      navigate('/');
     },
     [imgUpload, navigate],
   );
@@ -126,7 +130,7 @@ function Creation() {
                   />
                 </div>
                 {validImg && <p style={{ color: 'red' }}>Image is not valid</p>}
-                {validAdress && <p style={{ color: 'red' }}>Address already existed</p>}
+                {validAddress && <p style={{ color: 'red' }}>Address already existed</p>}
                 <div className={classes.infomation}>
                   <h1 className={classes.heading}>Create Organization</h1>
                   <div className={classes.form}>
