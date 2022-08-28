@@ -10,6 +10,7 @@ import { createOrganization } from 'ethereum';
 import { CATEGORY_LIST, PRICE_FOR_CREATING_ACCOUNT } from 'utils/constant';
 import background from 'assets/background.jpg';
 import cameraIcon from 'assets/camera.png';
+import { isFileImage } from 'utils/file-check';
 
 function Creation() {
   const navigate = useNavigate();
@@ -20,6 +21,9 @@ function Creation() {
   const [shortdes, setShortDes] = useState<string>();
   const [avatarPreveiw, setAvatarPreveiw] = useState<string>();
   const [imgUpload, setImgUpload] = useState<any>();
+
+  const [validImg, setValidImg] = useState<boolean>(false);
+  const [validAdress, setValidAdress] = useState<boolean>(false);
 
   const enable = useMemo(() => {
     const organisationInfo = {
@@ -38,29 +42,38 @@ function Creation() {
 
   const handleChangeAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
+      setValidImg(false);
       setImgUpload(e.target.files[0]);
       setAvatarPreveiw(URL.createObjectURL(e.target.files[0]));
     }
   };
 
   const handleCreate = async () => {
+    if (!isFileImage(imgUpload)) {
+      setValidImg(true);
+      return;
+    }
     if (enable) {
-      const res = await createOrganization(name || '');
-      const avatarImagesRef = ref(storage, `images/avatar-organization/${imgUpload.name.replace(/\s+/g, '')}`);
-      await uploadBytes(avatarImagesRef, imgUpload);
-      const avatarUrl = await getDownloadURL(
-        ref(storage, `images/avatar-organization/${imgUpload.name.replace(/\s+/g, '')}`),
-      );
-      await saveOrganization({
-        addressId: res.from,
-        name,
-        briefDes: shortdes,
-        description: des,
-        photoUrl: avatarUrl,
-        type: type,
-        contractAddress: res.contractAddress,
-      } as IOrganisation);
-      navigate('/');
+      try {
+        const res = await createOrganization(name || '');
+        const avatarImagesRef = ref(storage, `images/avatar-organization/${imgUpload.name.replace(/\s+/g, '')}`);
+        await uploadBytes(avatarImagesRef, imgUpload);
+        const avatarUrl = await getDownloadURL(
+          ref(storage, `images/avatar-organization/${imgUpload.name.replace(/\s+/g, '')}`),
+        );
+        await saveOrganization({
+          addressId: res.from,
+          name,
+          briefDes: shortdes,
+          description: des,
+          photoUrl: avatarUrl,
+          type: type,
+          contractAddress: res.contractAddress,
+        } as IOrganisation);
+        navigate('/');
+      } catch (error) {
+        setValidAdress(true);
+      }
     }
   };
 
@@ -87,8 +100,16 @@ function Creation() {
                 )}
               </div>
             </label>
-            <input type="file" id="filechange" style={{ display: 'none' }} onChange={handleChangeAvatar} accept="image/*" />
+            <input
+              type="file"
+              id="filechange"
+              style={{ display: 'none' }}
+              onChange={handleChangeAvatar}
+              accept="image/*"
+            />
           </div>
+          {validImg && <p style={{ color: 'red' }}>Image is not valid</p>}
+          {validAdress && <p style={{ color: 'red' }}>Address already existed</p>}
           <div className={classes.infomation}>
             <h1 className={classes.heading}>Create Organization</h1>
             <div className={classes.form}>
@@ -137,8 +158,7 @@ function Creation() {
             <button
               className={clsx(classes.createBtn, { [classes.activeCreate]: enable })}
               onClick={handleCreate}
-              disabled={!enable}
-            >
+              disabled={!enable}>
               Create a organization with only {PRICE_FOR_CREATING_ACCOUNT} ETH
             </button>
           </div>
