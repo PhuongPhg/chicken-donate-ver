@@ -13,7 +13,7 @@ import { useContractEventListener } from 'hooks/useContractEventListener';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { saveDonor } from 'service';
 import { IOrganisation } from 'types/organisation';
-import { PRICE_OF_EACH_EGG } from 'utils/constant';
+import { CURRENT_EGGS_LIST_SUPPORTED, PRICE_OF_EACH_EGG } from 'utils/constant';
 import RecentHistory, { IRecentHistory } from './RecentHistory';
 import classes from './style.module.scss';
 
@@ -41,10 +41,14 @@ function ProfileDetail(props: IOrganisation) {
 
   const handleClick = useCallback(
     async () => {
-      if (!isDisabledButton) {
-        const addressWallet = await signer.getAddress();
-        await saveDonor({ name: donorName, address: addressWallet });
-        await donate(addressId, totalPrice);
+      try {
+        if (!isDisabledButton) {
+          const addressWallet = await signer.getAddress();
+          await saveDonor({ name: donorName, address: addressWallet });
+          await donate(addressId, totalPrice);
+        }
+      } catch (error) {
+        console.log("error", error)
       }
     },
     [isDisabledButton, donorName, addressId, totalPrice],
@@ -126,11 +130,11 @@ function ProfileDetail(props: IOrganisation) {
       <div className={classes.donate}>
         <div className={classes.header}>
           <div className={classes.item}>
-            <img src={lockIcon} alt="" />
+            <img src={lockIcon} alt="membership" />
             <label>Membership</label>
           </div>
-          <div className={classes.item} style={{ backgroundColor: 'rgba(232, 82, 128, 0.2)', color: '#E85280' }}>
-            <img src={heartIcon} alt="" />
+          <div className={classes.item} style={{ backgroundColor: 'rgba(232, 82, 128, 0.2)', color: '#E85280', cursor: 'pointer' }}>
+            <img src={heartIcon} alt="support" />
             <label>Support</label>
           </div>
         </div>
@@ -146,16 +150,17 @@ function ProfileDetail(props: IOrganisation) {
         </div>
 
         <div className={classes.footer}>
-          <input placeholder="Your Name" onChange={selectDonorNameHandle} className={classes.inputname} />
-          <textarea placeholder="say somthing nice" className={classes.inputmess} />
+          <input placeholder="Your Name" onChange={selectDonorNameHandle} className={classes.inputname} maxLength={50}/>
+          <textarea placeholder="say something nice" className={classes.inputmess} maxLength={300} />
           <div className={classes.eggBox}>
-            <img src={eggIcon} alt="" />
+            <img src={eggIcon} alt="egg" />
             <img src={xIcon} alt="" style={{ height: 24, margin: '0 10px' }} />
-            {[1, 2, 3, 4, 5].map(ele => (
+            {CURRENT_EGGS_LIST_SUPPORTED.map(ele => (
               <button
                 key={ele}
                 onClick={() => handleSelectEggs(ele)}
                 className={clsx({ [classes.acticeBtn]: eggs === ele })}
+                style={{color: '#e85280'}}
               >
                 {ele}
               </button>
