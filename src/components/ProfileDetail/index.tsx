@@ -160,6 +160,7 @@ function ProfileDetail(props: IOrganisation) {
                 key={ele}
                 onClick={() => handleSelectEggs(ele)}
                 className={clsx({ [classes.acticeBtn]: eggs === ele })}
+                style={{color: '#e85280'}}
               >
                 {ele}
               </button>
