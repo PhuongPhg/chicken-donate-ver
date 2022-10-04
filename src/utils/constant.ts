@@ -15,3 +15,5 @@ export const CATEGORY_LIST = [
 export const WEBSITE_DOMAIN = 'chicken-donate-twd.netlify.app/';
 
 export const WEBSITE_PROFILE_DOMAIN = WEBSITE_DOMAIN + 'profile/';
+
+export const CURRENT_EGGS_LIST_SUPPORTED = [1, 2, 3, 4, 5]
