@@ -6,11 +6,13 @@ import classes from './style.module.scss';
 import eggIcon from 'assets/egg-donate.svg';
 import shareIcon from 'assets/share.png';
 import { useContractEventListener } from 'hooks/useContractEventListener';
+import useToast, { EToastType } from 'hooks/useToast';
 
 function Header(props: IOrganisation) {
   const { description, name, photoUrl, addressId } = props;
   const [amount, setAmount] = useState<string>();
   const [currentSignerAddress, setCurrentSignerAddress] = useState<string>('');
+  const toast = useToast()
 
   const fetchData = useCallback(async () => {
     const value = await getOrganizationBalance(addressId);
@@ -51,6 +53,18 @@ function Header(props: IOrganisation) {
     await withdraw(addressId);
   }, [addressId]);
 
+  const onClickShareButton = useCallback(
+    () => {
+      try {
+        navigator.clipboard.writeText(`Visit ${name} at ${window.location.href}profile/${addressId}`)
+        toast('🥚 Copy text to clipboard')
+      } catch (error) {
+        toast('Failed to copy text', EToastType.error)
+      }
+    },
+    [name, addressId, toast],
+  )
+  
   return (
     <div className={classes.container}>
       <img src={background} alt="" className={classes.background} />
@@ -69,12 +83,12 @@ function Header(props: IOrganisation) {
         <div className={classes.share}>
           <img src={eggIcon} alt="" width={24} height={24} />
           <div className={classes.curreny}>{amount} ETH</div>
-          <button style={{ margin: '0 0 0 20px'}}>
+          <button style={{ margin: '0 0 0 20px'}} onClick={onClickShareButton}>
             <img src={shareIcon} alt="" style={{ marginRight: 12 }} />
             <span style={{ color: 'black' }}>Share</span>
           </button>
           {isOwner && (
-            <button style={{ backgroundColor: '#E85280', fontWeight: 600, color: 'white' }} onClick={onWithdraw}>
+            <button style={{ backgroundColor: '#E85280', fontWeight: 600, color: 'white', marginTop: 0 }} onClick={onWithdraw}>
               Withdraw
             </button>
           )}
