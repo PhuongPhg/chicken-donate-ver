@@ -16,3 +16,13 @@ input, button {
   font-family: 'Poppins';
   font-style: normal;
 }
+
+.Toastify__close-button {
+  width: auto;
+  height: auto;
+  margin-top: 0px;
+}
+
+.Toastify__toast--error {
+  background: rgb(232, 82, 128) !important;
+}
