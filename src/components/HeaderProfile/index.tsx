@@ -56,13 +56,13 @@ function Header(props: IOrganisation) {
   const onClickShareButton = useCallback(
     () => {
       try {
-        navigator.clipboard.writeText(`Visit ${name} at ${window.location.href}profile/${addressId}`)
+        navigator.clipboard.writeText(`Visit ${name} at ${window.location.href}`)
         toast('🥚 Copy text to clipboard')
       } catch (error) {
         toast('Failed to copy text', EToastType.error)
       }
     },
-    [name, addressId, toast],
+    [name, toast],
   )
   
   return (
