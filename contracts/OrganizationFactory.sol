@@ -13,30 +13,25 @@ contract OrganizationFactory is Ownable {
   }
 
   uint256 private _value;
-  Organization[] public _organizations;
 
-  mapping(address => Organization) _organizationAddress;
+  mapping(address => Organization) public organizations;
 
   event OrganizationCreated(address indexed _address);
   event OrganizationDeactived(address indexed _address);
 
   function createOrganization() public payable {
-    require(!_organizationAddress[msg.sender].flag, 'Already in system');
+    require(!organizations[msg.sender].flag, 'Already in system');
     Organization memory newOrganization = Organization(msg.sender, true);
-    _organizations.push(newOrganization);
-  }
-
-  function getOrganizations() public view returns (Organization[] memory) {
-    return _organizations;
-  }
-
-  function getOrganization() public view returns (Organization memory) {
-    return _organizationAddress[msg.sender];
+    organizations[msg.sender] = newOrganization;
   }
 
   function deactiveOrganization() public {
-    require(_organizationAddress[msg.sender].flag, 'Not in system');
-    _organizationAddress[msg.sender].flag = false;
+    require(organizations[msg.sender].flag, 'Not in system');
+    organizations[msg.sender].flag = false;
+  }
+
+  function activeOrganization(address _address) public onlyOwner {
+    organizations[_address].flag = false;
   }
 
   function withdraw() public payable onlyOwner {

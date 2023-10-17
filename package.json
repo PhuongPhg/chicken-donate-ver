@@ -34,7 +34,8 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "format": "prettier --ignore-path .gitignore --ignore-path .prettierignore --write \"src/**/*.+(ts|tsx|js|json|css|html|md)\"",
-    "format-sc": "prettier --write 'contracts/**/*.sol'"
+    "format-sc": "prettier --write 'contracts/**/*.sol'",
+    "compile-contracts": "npx hardhat compile"
   },
   "eslintConfig": {
     "extends": [
