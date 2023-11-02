@@ -1,41 +1,40 @@
+// contracts/Box.sol
 // SPDX-License-Identifier: MIT
-pragma solidity >0.4.23 <0.9.0;
+pragma solidity ^0.8.0;
 
-import './Organization.sol';
-// import "@openzeppelin/contracts/proxy/Clones.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import '@openzeppelin/contracts/access/Ownable.sol';
 
-contract OrganizationFactory is Ownable{
+contract OrganizationFactory is Ownable {
+  constructor(address initialOwner) Ownable(initialOwner) {}
 
-  Organization[] public _organizations;
-  // uint totalOrganization;
-
-  struct OrganizationFlag {
+  struct Organization {
     address _address;
-    address contractAddress;
     bool flag;
   }
-  mapping(address => OrganizationFlag) _organizationContracts;
 
-  event OrganizationCreated(Organization newOrganization);
+  uint256 private _value;
 
-  function createOrganization (string memory _name) public payable {
-    require(!_organizationContracts[msg.sender].flag, "Already in system" );
-    Organization newOrganization = new Organization(_name, msg.sender);
-    newOrganization.transferOwnership(msg.sender);
-    _organizations.push(newOrganization);
-    // totalOrganization++;
-    _organizationContracts[msg.sender] = OrganizationFlag(msg.sender, address(newOrganization), true);
-    emit OrganizationCreated(newOrganization);
+  mapping(address => Organization) public organizations;
+
+  event OrganizationCreated(address indexed _address);
+  event OrganizationDeactived(address indexed _address);
+
+  function createOrganization() public payable {
+    require(!organizations[msg.sender].flag, 'Already in system');
+    Organization memory newOrganization = Organization(msg.sender, true);
+    organizations[msg.sender] = newOrganization;
   }
 
-  function allOrganizations () public view returns (Organization[] memory ){
-    return _organizations;
+  function deactiveOrganization() public {
+    require(organizations[msg.sender].flag, 'Not in system');
+    organizations[msg.sender].flag = false;
   }
-  function getContractOfOrganization(address _address) public view returns (address){
-    return _organizationContracts[_address].contractAddress;
+
+  function activeOrganization(address _address) public onlyOwner {
+    organizations[_address].flag = true;
   }
-  function withdraw () public payable onlyOwner{
+
+  function withdraw() public payable onlyOwner {
     payable(msg.sender).transfer(address(this).balance);
   }
 }

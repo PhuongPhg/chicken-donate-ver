@@ -2,13 +2,11 @@ import background from 'assets/background.jpg';
 import cameraIcon from 'assets/camera.png';
 import clsx from 'clsx';
 import StyledInput from 'components/StyledInput/StyledInput';
-import { createOrganization } from 'ethereum';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { storage } from 'firestore';
 import { Field, Formik } from 'formik';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { saveOrganization } from 'service';
 import { ECategoryTypes, IOrganisation } from 'types/organisation';
 import { CATEGORY_LIST, PRICE_FOR_CREATING_ACCOUNT } from 'utils/constant';
 import * as Yup from 'yup';
@@ -73,18 +71,12 @@ function Creation() {
           setValidImg(true);
           return;
         }
-        const res = await createOrganization(values.name || '');
         const avatarImagesRef = ref(storage, `images/avatar-organization/${values?.photoUrl?.replace(/\s+/g, '')}`);
         await uploadBytes(avatarImagesRef, imgUpload);
         const avatarUrl = await getDownloadURL(
           ref(storage, `images/avatar-organization/${imgUpload.name.replace(/\s+/g, '')}`),
         );
-        await saveOrganization({
-          ...values,
-          addressId: res.from,
-          photoUrl: avatarUrl,
-          contractAddress: res.contractAddress,
-        } as IOrganisation);
+
         navigate('/');
       } catch (error) {
         // TODO: add toast/notification modal for error

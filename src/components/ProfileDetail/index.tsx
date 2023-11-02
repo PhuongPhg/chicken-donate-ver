@@ -8,10 +8,7 @@ import twitterIcon from 'assets/twitter.png';
 import xIcon from 'assets/x.svg';
 import clsx from 'clsx';
 import StyledButton from 'components/StyledButton';
-import { donate, getDonations, getWithdrawTransaction, signer } from 'ethereum';
-import { useContractEventListener } from 'hooks/useContractEventListener';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { saveDonor } from 'service';
 import { IOrganisation } from 'types/organisation';
 import { CURRENT_EGGS_LIST_SUPPORTED, PRICE_OF_EACH_EGG } from 'utils/constant';
 import RecentHistory, { IRecentHistory } from './RecentHistory';
@@ -37,24 +34,16 @@ function ProfileDetail(props: IOrganisation) {
 
   const totalPrice = useMemo(() => eggs * PRICE_OF_EACH_EGG, [eggs]);
 
-  const isDisabledButton = useMemo(() => !donorName || !eggs, [donorName, eggs])
+  const isDisabledButton = useMemo(() => !donorName || !eggs, [donorName, eggs]);
 
-  const handleClick = useCallback(
-    async () => {
-      try {
-        if (!isDisabledButton) {
-          const addressWallet = await signer.getAddress();
-          await saveDonor({ name: donorName, address: addressWallet });
-          await donate(addressId, totalPrice);
-        }
-      } catch (error) {
-        console.log("error", error)
+  const handleClick = useCallback(async () => {
+    try {
+      if (!isDisabledButton) {
       }
-    },
-    [isDisabledButton, donorName, addressId, totalPrice],
-  )
-  ;
-
+    } catch (error) {
+      console.log('error', error);
+    }
+  }, [isDisabledButton, donorName, addressId, totalPrice]);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEggs(Number(e.target.value));
   };
@@ -63,15 +52,10 @@ function ProfileDetail(props: IOrganisation) {
     setDonorName(e.target.value);
   };
 
-  const handleGetDonations = useCallback(async () => {
-    const res = await getDonations(addressId);
-    setDonations(res);
-  }, [addressId]);
+  const handleGetDonations = useCallback(async () => {}, [addressId]);
 
   const handleGetHistories = useCallback(
     async (changeTab = true) => {
-      const res = (await getWithdrawTransaction(addressId)) as Partial<IRecentHistory>[];
-      setWithdrawTransactions(res);
       if (changeTab) {
         setRecentHistory(RecentHistoryEnum.WITHDRAWS);
       }
@@ -80,12 +64,10 @@ function ProfileDetail(props: IOrganisation) {
   );
 
   useEffect(() => {
-    if(addressId){
+    if (addressId) {
       handleGetDonations();
     }
   }, [handleGetDonations, addressId]);
-
-  useContractEventListener(addressId, handleGetDonations, () => handleGetHistories(false));
 
   return (
     <div className={classes.container}>
@@ -107,14 +89,12 @@ function ProfileDetail(props: IOrganisation) {
         <div style={{ display: 'flex' }}>
           <div
             className={clsx(classes.supported, { [classes.active]: recentHistory === RecentHistoryEnum.DONOR })}
-            onClick={() => setRecentHistory(RecentHistoryEnum.DONOR)}
-          >
+            onClick={() => setRecentHistory(RecentHistoryEnum.DONOR)}>
             RECENT DONORS
           </div>
           <div
             className={clsx(classes.supported, { [classes.active]: recentHistory === RecentHistoryEnum.WITHDRAWS })}
-            onClick={() => handleGetHistories(true)}
-          >
+            onClick={() => handleGetHistories(true)}>
             RECENT WITHDRAW
           </div>
         </div>
@@ -133,7 +113,9 @@ function ProfileDetail(props: IOrganisation) {
             <img src={lockIcon} alt="membership" />
             <label>Membership</label>
           </div>
-          <div className={classes.item} style={{ backgroundColor: 'rgba(232, 82, 128, 0.2)', color: '#E85280', cursor: 'pointer' }}>
+          <div
+            className={classes.item}
+            style={{ backgroundColor: 'rgba(232, 82, 128, 0.2)', color: '#E85280', cursor: 'pointer' }}>
             <img src={heartIcon} alt="support" />
             <label>Support</label>
           </div>
@@ -150,7 +132,12 @@ function ProfileDetail(props: IOrganisation) {
         </div>
 
         <div className={classes.footer}>
-          <input placeholder="Your Name" onChange={selectDonorNameHandle} className={classes.inputname} maxLength={50}/>
+          <input
+            placeholder="Your Name"
+            onChange={selectDonorNameHandle}
+            className={classes.inputname}
+            maxLength={50}
+          />
           <textarea placeholder="say something nice" className={classes.inputmess} maxLength={300} />
           <div className={classes.eggBox}>
             <img src={eggIcon} alt="egg" />
@@ -160,8 +147,7 @@ function ProfileDetail(props: IOrganisation) {
                 key={ele}
                 onClick={() => handleSelectEggs(ele)}
                 className={clsx({ [classes.acticeBtn]: eggs === ele })}
-                style={{color: '#e85280'}}
-              >
+                style={{ color: '#e85280' }}>
                 {ele}
               </button>
             ))}

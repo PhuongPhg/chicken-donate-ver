@@ -3,12 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@openzeppelin/contracts": "^4.6.0",
-    "@optionality.io/clone-factory": "^0.2.1",
+    "@openzeppelin/contracts": "^5.0.0",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
     "@testing-library/user-event": "^13.5.0",
-    "@truffle/hdwallet-provider": "^2.0.8",
     "@types/jest": "^27.5.1",
     "@types/node": "^16.11.36",
     "@types/react": "^18.0.9",
@@ -18,7 +16,6 @@
     "firebase": "^9.8.1",
     "formik": "^2.2.9",
     "gh-pages": "^4.0.0",
-    "material-react-toastify": "^1.0.1",
     "moment": "^2.29.3",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
@@ -37,7 +34,8 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "format": "prettier --ignore-path .gitignore --ignore-path .prettierignore --write \"src/**/*.+(ts|tsx|js|json|css|html|md)\"",
-    "format-sc": "prettier --write 'contracts/**/*.sol'"
+    "format-sc": "prettier --write 'contracts/**/*.sol'",
+    "compile-contracts": "npx hardhat compile"
   },
   "eslintConfig": {
     "extends": [
@@ -59,6 +57,7 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.182",
+    "hardhat": "^2.18.1",
     "prettier": "^2.6.2",
     "prettier-plugin-solidity": "^1.0.0-beta.19"
   }
