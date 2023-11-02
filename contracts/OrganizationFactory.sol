@@ -31,7 +31,7 @@ contract OrganizationFactory is Ownable {
   }
 
   function activeOrganization(address _address) public onlyOwner {
-    organizations[_address].flag = false;
+    organizations[_address].flag = true;
   }
 
   function withdraw() public payable onlyOwner {
